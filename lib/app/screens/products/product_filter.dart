@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:p2p_exchange/app/controllers/product_controller.dart';
+import 'package:p2p_exchange/app/controllers/product_controller_tempp.dart';
 
 class ShopHomePage extends StatelessWidget {
   static const title = 'Home';

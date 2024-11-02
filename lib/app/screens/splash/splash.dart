@@ -1,6 +1,7 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:p2p_exchange/app/components/navigator/navigator.dart';
 import 'package:p2p_exchange/app/screens/home/home.dart';
 import 'package:p2p_exchange/app/screens/login/login.dart';
 import 'package:p2p_exchange/app/utils/auth/auth_check.dart';
@@ -35,7 +36,7 @@ class SplashScreen extends StatelessWidget {
               ],
             ),
             nextScreen: AuthCheck(
-              homeScreen: const HomePage(),
+              homeScreen: const NavigatorBuilder(),
               loginScreen: const LoginPage(),
             ),
             splashTransition: SplashTransition.fadeTransition,

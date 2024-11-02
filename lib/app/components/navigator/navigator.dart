@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:p2p_exchange/app/screens/categories/categories.dart';
+import 'package:p2p_exchange/app/screens/categories/category.dart';
 import 'package:p2p_exchange/app/screens/home/home.dart';
 import 'package:p2p_exchange/app/screens/products/product1.dart';
 import 'package:p2p_exchange/app/screens/products/product_filter.dart';
