@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "814320157041",
+    "project_id": "p2p-exchange-b475c",
+    "storage_bucket": "p2p-exchange-b475c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814320157041:android:4ad076fdbe96367fceb6d0",
+        "android_client_info": {
+          "package_name": "p2pexchange.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB11kYg3aTOM5-u1nRFYSRGdEGdpIJzQPA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
