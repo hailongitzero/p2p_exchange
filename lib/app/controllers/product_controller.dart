@@ -14,8 +14,10 @@ class ProductController extends GetxController {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   var categories = <Category>[].obs;
   var product = Rxn<Product>();
+  var products = <Product>[].obs;
   var mainImageUrl = ''.obs; // To hold the main image URL
   var imageSlidesUrls = <String>[].obs; // To hold image slides URLs
+  var sortOrder = 'Giá tăng dần'.obs; // RxString for sort order
 
   final ImagePicker _picker = ImagePicker();
 
@@ -77,6 +79,23 @@ class ProductController extends GetxController {
     var snapshot = await _firestore.collection('products').doc(productId).get();
     if (snapshot.exists) {
       product.value = Product.fromMap(snapshot.data()!);
+    }
+  }
+
+  // Load product details if updating
+  Future<void> loadProducts(String productId) async {
+    var snapshot = await _firestore.collection('products').doc(productId).get();
+    if (snapshot.exists) {
+      product.value = Product.fromMap(snapshot.data()!);
+    }
+  }
+
+  // Method to sort products based on sort order
+  void sortProducts() {
+    if (sortOrder.value == 'Giá tăng dần') {
+      products.sort((a, b) => a.price.compareTo(b.price));
+    } else {
+      products.sort((a, b) => b.price.compareTo(a.price));
     }
   }
 }

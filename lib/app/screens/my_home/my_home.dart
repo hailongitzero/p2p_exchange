@@ -1,9 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:p2p_exchange/app/controllers/product_controller.dart';
-import 'package:p2p_exchange/app/models/product.dart';
+import 'package:p2p_exchange/app/screens/my_home/edit_product.dart';
 
-class ShopHomePage extends StatelessWidget {
+class MyHomePage extends StatelessWidget {
+  static const title = 'My Page';
+  static const icon = Icon(
+    CupertinoIcons.collections,
+    size: 25,
+  );
+
+  MyHomePage({super.key});
+
   final ProductController productController = Get.put(ProductController());
 
   @override
@@ -13,7 +22,7 @@ class ShopHomePage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               // Handle back action
             },
@@ -21,7 +30,7 @@ class ShopHomePage extends StatelessWidget {
           title: TextField(
             decoration: InputDecoration(
               hintText: 'Tìm kiếm khẩu trang',
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
@@ -30,19 +39,22 @@ class ShopHomePage extends StatelessWidget {
             ),
           ),
           actions: [
-            IconButton(
-              icon: Icon(Icons.filter_alt),
-              onPressed: () {
-                // Handle filter action
-              },
+            Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(Icons.filter_alt),
+                onPressed: () {
+                  // Open the right-side filter drawer
+                  Scaffold.of(context).openEndDrawer();
+                },
+              ),
             ),
           ],
-          bottom: TabBar(
+          bottom: const TabBar(
             isScrollable: true,
             tabs: [
-              Tab(text: 'Liên quan'),
+              Tab(text: 'Đang bán'),
               Tab(text: 'Mới nhất'),
-              Tab(text: 'Bán chạy'),
+              Tab(text: 'Yêu thích'),
               Tab(text: 'Giá'),
             ],
           ),
@@ -50,11 +62,23 @@ class ShopHomePage extends StatelessWidget {
         body: TabBarView(
           children: [
             ProductGridView(),
-            Center(child: Text('Mới nhất')),
-            Center(child: Text('Bán chạy')),
+            const Center(child: Text('Mới nhất')),
+            const Center(child: Text('Bán chạy')),
             PriceSortView(), // Updated Price tab with GetX sorting
           ],
         ),
+        endDrawer: FilterDrawer(), // Right-side filter panel
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 50.0), // Move up by 20 pixels
+          child: FloatingActionButton(
+            onPressed: () {
+              ProductForm();
+            },
+            child: const Icon(Icons.add),
+            backgroundColor: Colors.orange,
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       ),
     );
   }
@@ -69,11 +93,11 @@ class ProductGridView extends StatelessWidget {
     return Obx(() {
       return GridView.builder(
         padding: const EdgeInsets.all(8.0),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
-          childAspectRatio: 0.7,
+          childAspectRatio: 0.7, // Adjust to fit image and text nicely
         ),
         itemCount: productController.products.length,
         itemBuilder: (context, index) {
@@ -116,11 +140,11 @@ class PriceSortView extends StatelessWidget {
           child: Obx(() {
             return GridView.builder(
               padding: const EdgeInsets.all(8.0),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,
-                childAspectRatio: 0.7,
+                childAspectRatio: 0.7, // Adjust aspect ratio
               ),
               itemCount: productController.products.length,
               itemBuilder: (context, index) {
@@ -137,9 +161,8 @@ class PriceSortView extends StatelessWidget {
 
 // Widget for displaying a product card
 class ProductCard extends StatelessWidget {
-  final Product product;
-
-  const ProductCard({required this.product});
+  final product;
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -151,18 +174,19 @@ class ProductCard extends StatelessWidget {
         children: [
           Expanded(
             child: Image.network(
-              product.image,
-              fit: BoxFit.cover,
+              product['image']!,
+              fit: BoxFit.cover, // Ensures image fills container
               width: double.infinity,
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              product.name,
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              product['title']!,
+              style:
+                  const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
               maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.ellipsis, // Ensures no overflow
             ),
           ),
           Padding(
@@ -170,47 +194,89 @@ class ProductCard extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  "${product.price}đ",
-                  style: TextStyle(
+                  "${product['price']}đ",
+                  style: const TextStyle(
                     fontSize: 16.0,
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(width: 5.0),
-                // Text(
-                //   "${product['old_price']}đ",
-                //   style: TextStyle(
-                //     fontSize: 12.0,
-                //     color: Colors.grey,
-                //     decoration: TextDecoration.lineThrough,
-                //   ),
-                // ),
-                // Spacer(),
-                // Container(
-                //   padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
-                //   decoration: BoxDecoration(
-                //     color: Colors.yellow,
-                //     borderRadius: BorderRadius.circular(4.0),
-                //   ),
-                //   child: Text(
-                //     product['discount']!,
-                //     style: TextStyle(
-                //       fontSize: 12.0,
-                //       fontWeight: FontWeight.bold,
-                //     ),
-                //   ),
-                // ),
+                const SizedBox(width: 5.0),
+                Text(
+                  "${product['old_price']}đ",
+                  style: const TextStyle(
+                    fontSize: 12.0,
+                    color: Colors.grey,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 6.0, vertical: 2.0),
+                  decoration: BoxDecoration(
+                    color: Colors.yellow,
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: Text(
+                    product['discount']!,
+                    style: const TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Text(
-          //     product['sold']!,
-          //     style: TextStyle(fontSize: 12.0, color: Colors.grey),
-          //   ),
-          // ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              product['sold']!,
+              style: const TextStyle(fontSize: 12.0, color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Right-side filter panel (end drawer)
+class FilterDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.orange,
+            ),
+            child: Text(
+              'Bộ lọc',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+              ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.filter_list),
+            title: const Text('Filter Option 1'),
+            onTap: () {
+              // Handle filter option
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.filter_list),
+            title: const Text('Filter Option 2'),
+            onTap: () {
+              // Handle filter option
+            },
+          ),
+          // Add more filter options here
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:p2p_exchange/app/controllers/slide_controller.dart';
 
 class HomePage extends StatefulWidget {
   static const title = 'Home';
@@ -8,7 +9,7 @@ class HomePage extends StatefulWidget {
     CupertinoIcons.home,
     size: 25,
   );
-  const HomePage({
+  HomePage({
     super.key,
   });
 
@@ -23,6 +24,12 @@ class _HomePageState extends State<HomePage> {
     {'image': 'https://placehold.co/400', 'title': 'Featured Product 2'},
     {'image': 'https://placehold.co/400', 'title': 'Featured Product 3'},
   ];
+  final SlideController slideController = SlideController();
+  @override
+  void initState() {
+    super.initState();
+    slideController.fetchSlides();
+  }
 
   Widget _buildBody() {
     return Column(
@@ -67,13 +74,13 @@ class _HomePageState extends State<HomePage> {
             autoPlay: true,
             enlargeCenterPage: true,
           ),
-          items: imgList
+          items: slideController.slides
               .map((item) => Container(
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
                         Image.network(
-                          item['image']!,
+                          item.image,
                           fit: BoxFit.cover,
                           width: 1000,
                         ),
@@ -85,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 5),
                               child: Text(
-                                item['title']!,
+                                item.title,
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,

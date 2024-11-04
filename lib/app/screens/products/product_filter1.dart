@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:p2p_exchange/app/controllers/product_controller_tempp.dart';
+import 'package:p2p_exchange/app/controllers/product_controller.dart';
 
 class ShopHomePage extends StatelessWidget {
   static const title = 'Home';
@@ -21,7 +21,7 @@ class ShopHomePage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               // Handle back action
             },
@@ -29,7 +29,7 @@ class ShopHomePage extends StatelessWidget {
           title: TextField(
             decoration: InputDecoration(
               hintText: 'Tìm kiếm khẩu trang',
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
@@ -40,7 +40,7 @@ class ShopHomePage extends StatelessWidget {
           actions: [
             Builder(
               builder: (context) => IconButton(
-                icon: Icon(Icons.filter_alt),
+                icon: const Icon(Icons.filter_alt),
                 onPressed: () {
                   // Open the right-side filter drawer
                   Scaffold.of(context).openEndDrawer();
@@ -48,7 +48,7 @@ class ShopHomePage extends StatelessWidget {
               ),
             ),
           ],
-          bottom: TabBar(
+          bottom: const TabBar(
             isScrollable: true,
             tabs: [
               Tab(text: 'Đang bán'),
@@ -61,8 +61,8 @@ class ShopHomePage extends StatelessWidget {
         body: TabBarView(
           children: [
             ProductGridView(),
-            Center(child: Text('Mới nhất')),
-            Center(child: Text('Bán chạy')),
+            const Center(child: Text('Mới nhất')),
+            const Center(child: Text('Bán chạy')),
             PriceSortView(), // Updated Price tab with GetX sorting
           ],
         ),
@@ -81,7 +81,7 @@ class ProductGridView extends StatelessWidget {
     return Obx(() {
       return GridView.builder(
         padding: const EdgeInsets.all(8.0),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
@@ -128,7 +128,7 @@ class PriceSortView extends StatelessWidget {
           child: Obx(() {
             return GridView.builder(
               padding: const EdgeInsets.all(8.0),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,
@@ -149,7 +149,7 @@ class PriceSortView extends StatelessWidget {
 
 // Widget for displaying a product card
 class ProductCard extends StatelessWidget {
-  final Map<String, dynamic> product;
+  final product;
   const ProductCard({required this.product});
 
   @override
@@ -171,7 +171,8 @@ class ProductCard extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               product['title']!,
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              style:
+                  const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
               maxLines: 2,
               overflow: TextOverflow.ellipsis, // Ensures no overflow
             ),
@@ -182,31 +183,32 @@ class ProductCard extends StatelessWidget {
               children: [
                 Text(
                   "${product['price']}đ",
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16.0,
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(width: 5.0),
+                const SizedBox(width: 5.0),
                 Text(
                   "${product['old_price']}đ",
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12.0,
                     color: Colors.grey,
                     decoration: TextDecoration.lineThrough,
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 6.0, vertical: 2.0),
                   decoration: BoxDecoration(
                     color: Colors.yellow,
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   child: Text(
                     product['discount']!,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -219,7 +221,7 @@ class ProductCard extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               product['sold']!,
-              style: TextStyle(fontSize: 12.0, color: Colors.grey),
+              style: const TextStyle(fontSize: 12.0, color: Colors.grey),
             ),
           ),
         ],
@@ -236,7 +238,7 @@ class FilterDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(
+          const DrawerHeader(
             decoration: BoxDecoration(
               color: Colors.orange,
             ),
@@ -249,15 +251,15 @@ class FilterDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.filter_list),
-            title: Text('Filter Option 1'),
+            leading: const Icon(Icons.filter_list),
+            title: const Text('Filter Option 1'),
             onTap: () {
               // Handle filter option
             },
           ),
           ListTile(
-            leading: Icon(Icons.filter_list),
-            title: Text('Filter Option 2'),
+            leading: const Icon(Icons.filter_list),
+            title: const Text('Filter Option 2'),
             onTap: () {
               // Handle filter option
             },

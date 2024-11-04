@@ -114,6 +114,9 @@ class _ProductsPageState extends State<ProductsPage> {
                         child: Image.network(
                           product['image']!,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Text('Error loading image');
+                          },
                         ),
                       ),
                     ),

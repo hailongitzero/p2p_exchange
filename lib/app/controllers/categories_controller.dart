@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:p2p_exchange/app/models/category.dart';
+import 'package:p2p_exchange/app/services/category.dart';
 
 class CategoryController extends GetxController {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final CategoryService service = CategoryService();
   var categories = <Category>[].obs;
   var filteredCategories = <Category>[].obs;
 
@@ -13,23 +13,17 @@ class CategoryController extends GetxController {
     fetchCategories();
   }
 
-  void fetchCategories() {
-    _firestore.collection('categories').snapshots().listen((snapshot) {
-      categories.value = snapshot.docs
-          .map((doc) => Category.fromDocumentSnapshot(doc))
-          .toList();
-    });
+  Future<void> fetchCategories() async {
+    // categories = service.fetchCategories() as RxList<Category>;
+    categories = await service.fetchCategories();
   }
 
   Future<void> addCategory(Category category) async {
-    await _firestore.collection('categories').add(category.toMap());
+    await service.addCategory(category);
   }
 
   Future<void> updateCategory(Category category) async {
-    await _firestore
-        .collection('categories')
-        .doc(category.id)
-        .update(category.toMap());
+    await service.updateCategory(category);
   }
 
   void filterCategories(String query) {

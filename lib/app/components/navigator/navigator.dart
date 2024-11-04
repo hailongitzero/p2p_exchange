@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:p2p_exchange/app/screens/categories/category.dart';
 import 'package:p2p_exchange/app/screens/home/home.dart';
+import 'package:p2p_exchange/app/screens/my_home/my_home.dart';
 import 'package:p2p_exchange/app/screens/products/product1.dart';
-import 'package:p2p_exchange/app/screens/products/product_filter.dart';
+import 'package:p2p_exchange/app/screens/products/product_filter1.dart';
 import 'package:p2p_exchange/app/screens/products/products.dart';
 
 class NavigatorBuilder extends StatefulWidget {
@@ -34,7 +35,7 @@ class _NavigatorBuilderState extends State<NavigatorBuilder> {
           ),
           BottomNavigationBarItem(
             // label: HomePage.title,
-            icon: ShopHomePage.icon,
+            icon: MyHomePage.icon,
           ),
         ],
       ),
@@ -49,13 +50,13 @@ class _NavigatorBuilderState extends State<NavigatorBuilder> {
             ),
           1 => CupertinoTabView(
               defaultTitle: CategoryScreen.title,
-              builder: (context) => ShopItemScreen(
+              builder: (context) => CategoryScreen(
                 key: receiptKey,
               ),
             ),
           2 => CupertinoTabView(
-              defaultTitle: ShopHomePage.title,
-              builder: (context) => ShopHomePage(
+              defaultTitle: MyHomePage.title,
+              builder: (context) => MyHomePage(
                 key: productKey,
               ),
             ),
