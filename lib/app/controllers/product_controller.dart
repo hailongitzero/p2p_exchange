@@ -30,11 +30,15 @@ class ProductController extends GetxController {
 
   // Pick and upload the main image
   Future<void> pickAndUploadMainImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      String downloadUrl =
-          await _uploadImage(File(pickedFile.path), 'main_images');
-      mainImageUrl.value = downloadUrl;
+    try {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        String downloadUrl =
+            await _uploadImage(File(pickedFile.path), 'images/products');
+        mainImageUrl.value = downloadUrl;
+      }
+    } catch (e) {
+      print("Error picking/uploading image: $e");
     }
   }
 
@@ -93,9 +97,9 @@ class ProductController extends GetxController {
   // Method to sort products based on sort order
   void sortProducts() {
     if (sortOrder.value == 'Giá tăng dần') {
-      products.sort((a, b) => a.price.compareTo(b.price));
+      products.sort((a, b) => (a.price ?? 0).compareTo(b.price ?? 0));
     } else {
-      products.sort((a, b) => b.price.compareTo(a.price));
+      products.sort((a, b) => (a.price ?? 0).compareTo(a.price ?? 0));
     }
   }
 }

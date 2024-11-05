@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:p2p_exchange/app/controllers/product_controller.dart';
 import 'package:p2p_exchange/app/screens/my_home/edit_product.dart';
+import 'package:p2p_exchange/app/screens/products/product_filter1.dart';
 
 class MyHomePage extends StatelessWidget {
   static const title = 'My Page';
@@ -64,15 +65,20 @@ class MyHomePage extends StatelessWidget {
             ProductGridView(),
             const Center(child: Text('Mới nhất')),
             const Center(child: Text('Bán chạy')),
-            PriceSortView(), // Updated Price tab with GetX sorting
+            PriceSortView(),
           ],
         ),
-        endDrawer: FilterDrawer(), // Right-side filter panel
+        endDrawer: FilterDrawer(),
         floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 50.0), // Move up by 20 pixels
+          padding: const EdgeInsets.only(bottom: 50.0),
           child: FloatingActionButton(
             onPressed: () {
-              ProductForm();
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return ProductForm();
+                },
+              );
             },
             child: const Icon(Icons.add),
             backgroundColor: Colors.orange,
@@ -84,7 +90,6 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
-// Widget for displaying products
 class ProductGridView extends StatelessWidget {
   final ProductController productController = Get.find();
 
@@ -97,7 +102,7 @@ class ProductGridView extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
-          childAspectRatio: 0.7, // Adjust to fit image and text nicely
+          childAspectRatio: 0.7,
         ),
         itemCount: productController.products.length,
         itemBuilder: (context, index) {
@@ -109,57 +114,6 @@ class ProductGridView extends StatelessWidget {
   }
 }
 
-// Widget for sorting products by price
-class PriceSortView extends StatelessWidget {
-  final ProductController productController = Get.find();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Obx(() {
-            return DropdownButton<String>(
-              value: productController.sortOrder.value,
-              onChanged: (String? newValue) {
-                productController.sortOrder.value = newValue!;
-                productController.sortProducts(); // Call sorting method
-              },
-              items: <String>['Giá tăng dần', 'Giá giảm dần']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            );
-          }),
-        ),
-        Expanded(
-          child: Obx(() {
-            return GridView.builder(
-              padding: const EdgeInsets.all(8.0),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-                childAspectRatio: 0.7, // Adjust aspect ratio
-              ),
-              itemCount: productController.products.length,
-              itemBuilder: (context, index) {
-                final product = productController.products[index];
-                return ProductCard(product: product);
-              },
-            );
-          }),
-        ),
-      ],
-    );
-  }
-}
-
-// Widget for displaying a product card
 class ProductCard extends StatelessWidget {
   final product;
   const ProductCard({super.key, required this.product});
@@ -173,11 +127,8 @@ class ProductCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: Image.network(
-              product['image']!,
-              fit: BoxFit.cover, // Ensures image fills container
-              width: double.infinity,
-            ),
+            child: ImageSlider(
+                images: product['images'] ?? []), // Image slider here
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -186,7 +137,7 @@ class ProductCard extends StatelessWidget {
               style:
                   const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
               maxLines: 2,
-              overflow: TextOverflow.ellipsis, // Ensures no overflow
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           Padding(
@@ -242,7 +193,25 @@ class ProductCard extends StatelessWidget {
   }
 }
 
-// Right-side filter panel (end drawer)
+class ImageSlider extends StatelessWidget {
+  final List<String> images;
+  const ImageSlider({super.key, required this.images});
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView.builder(
+      itemCount: images.length,
+      itemBuilder: (context, index) {
+        return Image.network(
+          images[index],
+          fit: BoxFit.cover,
+          width: double.infinity,
+        );
+      },
+    );
+  }
+}
+
 class FilterDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

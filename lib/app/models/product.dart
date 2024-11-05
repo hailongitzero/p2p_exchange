@@ -1,30 +1,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Product {
-  late String id;
+  late String? id;
   late String name;
   late String description;
-  late double price;
-  late String categoryId;
-  late String image; // main product image
-  late List<String> imageSlides; // additional images for slideshow
-  late DateTime createdAt;
+  late double? price;
+  late String? categoryId;
+  late String? image; // main product image
+  late List<String>? imageSlides; // additional images for slideshow
+  late DateTime? createdAt;
   late String userId;
-  late List<String> comments;
-  late List<String> tradeList;
+  late List<String>? comments;
+  late List<String>? tradeList;
 
   Product({
-    required this.id,
+    this.id,
     required this.name,
     required this.description,
-    required this.price,
-    required this.categoryId,
-    required this.image,
-    required this.imageSlides,
-    required this.createdAt,
+    this.price,
+    this.categoryId,
+    this.image,
+    this.imageSlides,
+    this.createdAt,
     required this.userId,
-    required this.comments,
-    required this.tradeList,
+    this.comments,
+    this.tradeList,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
@@ -49,7 +49,7 @@ class Product {
         'categoryId': categoryId,
         'image': image,
         'imageSlides': imageSlides,
-        'createdAt': Timestamp.fromDate(createdAt),
+        'createdAt': Timestamp.fromDate(createdAt!),
         'userId': userId,
         'comments': comments,
         'tradeList': tradeList,

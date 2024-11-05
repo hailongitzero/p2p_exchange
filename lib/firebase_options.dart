@@ -46,7 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '814320157041',
     projectId: 'p2p-exchange-b475c',
     authDomain: 'p2p-exchange-b475c.firebaseapp.com',
-    storageBucket: 'p2p-exchange-b475c.appspot.com',
+    storageBucket: 'p2p-exchange-b475c.firebasestorage.app',
     measurementId: 'G-QJLHHYVXG0',
   );
 
@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
     appId: '1:814320157041:android:4ad076fdbe96367fceb6d0',
     messagingSenderId: '814320157041',
     projectId: 'p2p-exchange-b475c',
-    storageBucket: 'p2p-exchange-b475c.appspot.com',
+    storageBucket: 'p2p-exchange-b475c.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
     appId: '1:814320157041:ios:95eac0c29e53632cceb6d0',
     messagingSenderId: '814320157041',
     projectId: 'p2p-exchange-b475c',
-    storageBucket: 'p2p-exchange-b475c.appspot.com',
+    storageBucket: 'p2p-exchange-b475c.firebasestorage.app',
     iosBundleId: 'com.example.p2pExchange',
   );
 
@@ -72,7 +72,7 @@ class DefaultFirebaseOptions {
     appId: '1:814320157041:ios:95eac0c29e53632cceb6d0',
     messagingSenderId: '814320157041',
     projectId: 'p2p-exchange-b475c',
-    storageBucket: 'p2p-exchange-b475c.appspot.com',
+    storageBucket: 'p2p-exchange-b475c.firebasestorage.app',
     iosBundleId: 'com.example.p2pExchange',
   );
 
@@ -82,8 +82,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '814320157041',
     projectId: 'p2p-exchange-b475c',
     authDomain: 'p2p-exchange-b475c.firebaseapp.com',
-    storageBucket: 'p2p-exchange-b475c.appspot.com',
+    storageBucket: 'p2p-exchange-b475c.firebasestorage.app',
     measurementId: 'G-MY263Y0LH6',
   );
-
 }
