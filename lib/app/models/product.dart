@@ -6,6 +6,8 @@ class Product {
   late String description;
   late double? price;
   late String? categoryId;
+  late String? status; //sold/stock
+  late String? condition; //old new
   late String? image; // main product image
   late List<String>? imageSlides; // additional images for slideshow
   late DateTime? createdAt;
@@ -19,6 +21,8 @@ class Product {
     required this.description,
     this.price,
     this.categoryId,
+    this.status,
+    this.condition,
     this.image,
     this.imageSlides,
     this.createdAt,
@@ -33,6 +37,8 @@ class Product {
         description: json['description'],
         price: json['price'].toDouble(),
         categoryId: json['categoryId'],
+        status: json['status'],
+        condition: json['condition'],
         image: json['image'],
         imageSlides: List<String>.from(json['imageSlides']),
         createdAt: (json['createdAt'] as Timestamp).toDate(),
@@ -47,6 +53,8 @@ class Product {
         'description': description,
         'price': price,
         'categoryId': categoryId,
+        'status': status,
+        'condition': condition,
         'image': image,
         'imageSlides': imageSlides,
         'createdAt': Timestamp.fromDate(createdAt!),
@@ -61,6 +69,8 @@ class Product {
         description: data['description'],
         price: data['price'],
         categoryId: data['categoryId'],
+        status: data['status'],
+        condition: data['condition'],
         image: data['image'],
         imageSlides: List<String>.from(data['imageSlides']),
         createdAt: (data['createdAt'] as Timestamp).toDate(),

@@ -15,8 +15,10 @@ class ProductController extends GetxController {
   var categories = <Category>[].obs;
   var product = Rxn<Product>();
   var products = <Product>[].obs;
-  var mainImageUrl = ''.obs; // To hold the main image URL
   var imageSlidesUrls = <String>[].obs; // To hold image slides URLs
+  var isImageSlidesUploading = false.obs;
+  var mainImageUrl = ''.obs; // To hold the main image URL
+  var isMainImageUploading = false.obs;
   var sortOrder = 'Giá tăng dần'.obs; // RxString for sort order
 
   final ImagePicker _picker = ImagePicker();
@@ -31,26 +33,36 @@ class ProductController extends GetxController {
   // Pick and upload the main image
   Future<void> pickAndUploadMainImage() async {
     try {
+      isMainImageUploading.value = true;
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         String downloadUrl =
             await _uploadImage(File(pickedFile.path), 'images/products');
         mainImageUrl.value = downloadUrl;
       }
+      isMainImageUploading.value = false;
     } catch (e) {
+      isMainImageUploading.value = false;
       print("Error picking/uploading image: $e");
     }
   }
 
   // Pick and upload multiple slide images
   Future<void> pickAndUploadSlideImages() async {
-    final pickedFiles = await _picker.pickMultiImage();
-    if (pickedFiles != null) {
-      for (var file in pickedFiles) {
-        String downloadUrl =
-            await _uploadImage(File(file.path), 'slide_images');
-        imageSlidesUrls.add(downloadUrl);
+    try {
+      final pickedFiles = await _picker.pickMultiImage();
+      isImageSlidesUploading.value = true;
+      if (pickedFiles != null) {
+        for (var file in pickedFiles) {
+          String downloadUrl =
+              await _uploadImage(File(file.path), 'slide_images');
+          imageSlidesUrls.add(downloadUrl);
+        }
       }
+      isImageSlidesUploading.value = false;
+    } catch (e) {
+      isImageSlidesUploading.value = false;
+      print("Error picking/uploading image: $e");
     }
   }
 
@@ -63,19 +75,29 @@ class ProductController extends GetxController {
   }
 
   // Insert or update a product
-  Future<void> saveProduct(Product product) async {
-    await _firestore.collection('products').doc(product.productId).set({
-      'name': product.name,
-      'description': product.description,
-      'price': product.price,
-      'categoryId': product.categoryId,
-      'mainImage': product.mainImage,
-      'imageSlides': product.imageSlides,
-      'createdAt': product.createdAt,
-      'userId': product.userId,
-      'comments': product.comments,
-      'tradeList': product.tradeList,
+  Future<void> saveProduct(Product editProduct) async {
+    if (imageSlidesUrls.isNotEmpty) {
+      editProduct.imageSlides = imageSlidesUrls;
+    }
+    if (mainImageUrl.value.isNotEmpty) {
+      editProduct.image = mainImageUrl.value;
+    }
+
+    await _firestore.collection('products').doc(editProduct.productId).set({
+      'name': editProduct.name,
+      'description': editProduct.description,
+      'price': editProduct.price,
+      'categoryId': editProduct.categoryId,
+      'image': editProduct.image,
+      'imageSlides': editProduct.imageSlides,
+      'createdAt': editProduct.createdAt,
+      'userId': editProduct.userId,
+      'comments': editProduct.comments,
+      'tradeList': editProduct.tradeList,
     });
+    imageSlidesUrls.value = [];
+    mainImageUrl.value = '';
+    product.value = null;
   }
 
   // Load product details if updating

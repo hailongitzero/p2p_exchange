@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:p2p_exchange/app/controllers/categories_controller%20copy.dart';
 import 'package:p2p_exchange/app/controllers/categories_controller.dart';
 import 'package:p2p_exchange/app/controllers/product_controller.dart';
 import 'package:p2p_exchange/app/models/category.dart';
 import 'package:p2p_exchange/app/models/product.dart';
+import 'package:p2p_exchange/app/models/product_condition.dart';
 
-class ProductForm extends StatelessWidget {
+class EditProduct extends StatelessWidget {
   final ProductController productController = Get.put(ProductController());
   final CategoryController categoryController = Get.put(CategoryController());
+  final ProductConditionController conditionController =
+      Get.put(ProductConditionController());
 
-  ProductForm({super.key}) {
+  EditProduct({super.key}) {
     // Check if product is null; if so, initialize it as a new Product instance
     productController.product.value ??=
         Product(name: '', description: '', userId: '');
@@ -37,6 +41,7 @@ class ProductForm extends StatelessWidget {
             ),
             TextFormField(
               initialValue: productController.product.value?.description,
+              maxLines: 5,
               decoration: const InputDecoration(labelText: 'Description'),
               onChanged: (value) => productController.product.update((prod) {
                 prod?.description = value;
@@ -49,6 +54,28 @@ class ProductForm extends StatelessWidget {
               onChanged: (value) => productController.product.update((prod) {
                 prod?.price = double.tryParse(value) ?? 0;
               }),
+            ),
+
+            SizedBox(
+              width: double.infinity,
+              child: Obx(() => DropdownButtonFormField<String>(
+                    value: productController.product.value?.condition,
+                    decoration: const InputDecoration(
+                      labelText: 'Product Condition',
+                    ),
+                    isExpanded: true, // Ensures dropdown takes full width
+                    items: conditionController.conditions
+                        .map((ProductCondition condition) {
+                      return DropdownMenuItem<String>(
+                        value: condition.id,
+                        child: Text(condition.meaning),
+                      );
+                    }).toList(),
+                    onChanged: (value) =>
+                        productController.product.update((prod) {
+                      prod?.condition = value!;
+                    }),
+                  )),
             ),
 
             // Full-width Dropdown for Categories
@@ -73,39 +100,87 @@ class ProductForm extends StatelessWidget {
                     }),
                   )),
             ),
-
-            // Button to pick main image
-            ElevatedButton(
-              onPressed: () async {
-                await productController.pickAndUploadMainImage();
-              },
-              child: const Text('Pick Main Image'),
-            ),
-            Obx(() => productController.mainImageUrl.isNotEmpty
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Image.network(
-                      productController.mainImageUrl.value,
-                      width: double.infinity,
-                      height: 200,
-                      fit: BoxFit.cover,
+            Obx(() => Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Loading indicator or main image
+                    if (productController.isMainImageUploading.value)
+                      const Padding(
+                        padding: EdgeInsets.only(left: 16.0),
+                        child: CircularProgressIndicator(),
+                      )
+                    else if (productController.mainImageUrl.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: Image.network(
+                          productController.mainImageUrl.value,
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    else
+                      Container(), // Empty container if there's no image
+                    ElevatedButton(
+                      // Button to pick main image
+                      onPressed: productController.isMainImageUploading.value
+                          ? null
+                          : () async {
+                              await productController.pickAndUploadMainImage();
+                            },
+                      child: const Text('Pick Main Image'),
                     ),
-                  )
-                : Container()),
+                  ],
+                )),
+
+            Obx(() => Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Loading indicator or main image
+                    if (productController.isImageSlidesUploading.value)
+                      const Padding(
+                        padding: EdgeInsets.only(left: 16.0),
+                        child: CircularProgressIndicator(),
+                      )
+                    else if (productController.imageSlidesUrls.isNotEmpty)
+                      Wrap(
+                        spacing: 8.0,
+                        children: productController.imageSlidesUrls
+                            .map((url) =>
+                                Image.network(url, width: 100, height: 100))
+                            .toList(),
+                      )
+                    else
+                      Container(), // Empty container if there's no image
+                    ElevatedButton(
+                      // Button to pick main image
+                      onPressed: productController.isImageSlidesUploading.value
+                          ? null
+                          : () async {
+                              await productController
+                                  .pickAndUploadSlideImages();
+                            },
+                      child: const Text('Pick Main Image'),
+                    ),
+                  ],
+                )),
 
             // Button to pick slide images
-            ElevatedButton(
-              onPressed: () async {
-                await productController.pickAndUploadSlideImages();
-              },
-              child: const Text('Pick Slide Images'),
-            ),
-            Obx(() => Wrap(
-                  spacing: 8.0,
-                  children: productController.imageSlidesUrls
-                      .map((url) => Image.network(url, width: 100, height: 100))
-                      .toList(),
-                )),
+            // ElevatedButton(
+            //   onPressed: () async {
+            //     await productController.pickAndUploadSlideImages();
+            //   },
+            //   child: const Text('Pick Slide Images'),
+            // ),
+            // Obx(() => productController.imageSlidesUrls.isNotEmpty
+            //     ? Wrap(
+            //         spacing: 8.0,
+            //         children: productController.imageSlidesUrls
+            //             .map((url) =>
+            //                 Image.network(url, width: 100, height: 100))
+            //             .toList(),
+            //       )
+            //     : Container()),
 
             // Submit button
             Padding(

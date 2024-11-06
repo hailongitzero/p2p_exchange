@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:p2p_exchange/app/controllers/categories_controller.dart';
 
 class CategoryScreen extends StatelessWidget {
-  static const title = 'Home';
+  static const title = 'Category';
   static const icon = Icon(
-    CupertinoIcons.home,
+    CupertinoIcons.list_bullet_below_rectangle,
     size: 25,
   );
   CategoryScreen({
@@ -19,10 +19,10 @@ class CategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ShopeeFood Categories'),
+        title: const Text('ShopeeFood Categories'),
         actions: [
           IconButton(
-            icon: Icon(Icons.filter_list),
+            icon: const Icon(Icons.filter_list),
             onPressed: () {
               // Add action for filters if needed
             },
@@ -34,7 +34,7 @@ class CategoryScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Search',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.search),
@@ -47,7 +47,7 @@ class CategoryScreen extends StatelessWidget {
           Expanded(
             child: Obx(() {
               return GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 2 / 1, // Adjust as needed
                 ),
@@ -63,7 +63,7 @@ class CategoryScreen extends StatelessWidget {
                           height: 50,
                           fit: BoxFit.cover,
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(category.title, textAlign: TextAlign.center),
                       ],
                     ),

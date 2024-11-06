@@ -40,6 +40,8 @@ products
 ├── price: 999.99
 ├── categoryId: "categoryId"
 ├── image: "https://example.com/product-main.jpg" // main image
+├── status
+├── TinhTrang
 ├── imageSlides: [
 "https://example.com/product-image1.jpg",//thư viện firebase async firebase
 "https://example.com/product-image2.jpg",
@@ -57,3 +59,7 @@ comments
 ├── content: "Great product!"
 ├── createdAt: <timestamp>
 └── likes: 12
+
+//them loadmore,
+//try catch image
+hang moi/ hang cu

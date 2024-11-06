@@ -9,7 +9,7 @@ class HomePage extends StatefulWidget {
     CupertinoIcons.home,
     size: 25,
   );
-  HomePage({
+  const HomePage({
     super.key,
   });
 
@@ -83,6 +83,10 @@ class _HomePageState extends State<HomePage> {
                           item.image,
                           fit: BoxFit.cover,
                           width: 1000,
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace? stackTrace) {
+                            return Image.asset('lib/assets/images/400.png');
+                          },
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -152,6 +156,10 @@ class _HomePageState extends State<HomePage> {
                         child: Image.network(
                           'https://placehold.co/150', // Replace with your actual product image URL
                           fit: BoxFit.cover,
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace? stackTrace) {
+                            return Image.asset('lib/assets/images/400.png');
+                          },
                         ),
                       ),
                     ),

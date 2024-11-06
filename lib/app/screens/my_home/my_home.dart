@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:p2p_exchange/app/controllers/product_controller.dart';
 import 'package:p2p_exchange/app/screens/my_home/edit_product.dart';
-import 'package:p2p_exchange/app/screens/products/product_filter1.dart';
 
 class MyHomePage extends StatelessWidget {
   static const title = 'My Page';
@@ -19,7 +18,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -30,7 +29,7 @@ class MyHomePage extends StatelessWidget {
           ),
           title: TextField(
             decoration: InputDecoration(
-              hintText: 'Tìm kiếm khẩu trang',
+              hintText: 'Tìm kiếm',
               prefixIcon: const Icon(Icons.search),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8.0),
@@ -56,7 +55,7 @@ class MyHomePage extends StatelessWidget {
               Tab(text: 'Đang bán'),
               Tab(text: 'Mới nhất'),
               Tab(text: 'Yêu thích'),
-              Tab(text: 'Giá'),
+              // Tab(text: 'Giá'),
             ],
           ),
         ),
@@ -65,7 +64,7 @@ class MyHomePage extends StatelessWidget {
             ProductGridView(),
             const Center(child: Text('Mới nhất')),
             const Center(child: Text('Bán chạy')),
-            PriceSortView(),
+            // PriceSortView(),
           ],
         ),
         endDrawer: FilterDrawer(),
@@ -76,7 +75,7 @@ class MyHomePage extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return ProductForm();
+                  return EditProduct();
                 },
               );
             },

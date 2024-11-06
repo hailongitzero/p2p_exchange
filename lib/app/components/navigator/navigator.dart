@@ -31,7 +31,7 @@ class _NavigatorBuilderState extends State<NavigatorBuilder> {
           ),
           BottomNavigationBarItem(
             // label: HomePage.title,
-            icon: ShopItemScreen.icon,
+            icon: CategoryScreen.icon,
           ),
           BottomNavigationBarItem(
             // label: HomePage.title,
