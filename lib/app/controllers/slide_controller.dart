@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:p2p_exchange/app/models/slide.dart';
 import 'package:p2p_exchange/app/services/slide.dart';
@@ -16,7 +15,6 @@ class SlideController extends GetxController {
 
   Future<void> fetchSlides() async {
     slides = await service.fetchSlides();
-    print(slides);
   }
 
   Future<void> addSlide(Slide slide) async {

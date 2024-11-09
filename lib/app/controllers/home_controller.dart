@@ -8,6 +8,8 @@ class ProductController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var categories = <Category>[].obs;
   var product = Rxn<Product>();
+  var products = <Product>[].obs;
+  var sortOrder = 'Giá tăng dần'.obs; // RxString for sort order
 
   // Load categories from Firebase
   Future<void> loadCategories() async {
@@ -16,27 +18,28 @@ class ProductController extends GetxController {
         snapshot.docs.map((doc) => Category.fromMap(doc.data())).toList();
   }
 
-  // Insert or update a product
-  Future<void> saveProduct(Product product) async {
-    await _firestore.collection('products').doc(product.id).set({
-      'name': product.name,
-      'description': product.description,
-      'price': product.price,
-      'categoryId': product.categoryId,
-      'mainImage': product.image,
-      'imageSlides': product.imageSlides,
-      'createdAt': product.createdAt,
-      'userId': product.userId,
-      'comments': product.comments,
-      'tradeList': product.tradeList,
-    });
-  }
-
   // Load product details if updating
   Future<void> loadProduct(String productId) async {
     var snapshot = await _firestore.collection('products').doc(productId).get();
     if (snapshot.exists) {
-      product.value = Product.fromMap(snapshot.data()!);
+      product.value = Product.fromJson(snapshot.data()!);
+    }
+  }
+
+  // Load product details if updating
+  Future<void> loadProducts() async {
+    try {
+      // Query Firestore for products with the specified userId
+      var snapshot = await _firestore
+          .collection('products')
+          .where('status', isEqualTo: 'Stock')
+          .get();
+
+      // Map the documents to Product objects and add to myProducts
+      products.value =
+          snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList();
+    } catch (e) {
+      // Handle errors here, like logging or showing an error message
     }
   }
 }

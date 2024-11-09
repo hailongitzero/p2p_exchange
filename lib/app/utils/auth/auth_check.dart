@@ -5,7 +5,8 @@ class AuthCheck extends StatelessWidget {
   final Widget homeScreen;
   final Widget loginScreen;
 
-  AuthCheck({required this.homeScreen, required this.loginScreen});
+  const AuthCheck(
+      {super.key, required this.homeScreen, required this.loginScreen});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class AuthCheck extends StatelessWidget {
       builder: (context, snapshot) {
         // Show a loading indicator while waiting for auth state
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
 
         // Redirect based on login state

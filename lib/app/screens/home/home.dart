@@ -57,13 +57,13 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   _openFilterDialog(context);
                 },
-                child: const Icon(Icons.filter_list),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   padding: const EdgeInsets.all(16),
                 ),
+                child: const Icon(Icons.filter_list),
               ),
             ],
           ),

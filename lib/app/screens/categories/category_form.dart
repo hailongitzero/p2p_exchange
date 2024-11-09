@@ -9,10 +9,10 @@ import 'package:p2p_exchange/app/models/category.dart';
 class CategoryForm extends StatefulWidget {
   final Category? category;
 
-  CategoryForm({this.category});
+  const CategoryForm({super.key, this.category});
 
   @override
-  _CategoryFormState createState() => _CategoryFormState();
+  State<CategoryForm> createState() => _CategoryFormState();
 }
 
 class _CategoryFormState extends State<CategoryForm> {
@@ -58,7 +58,6 @@ class _CategoryFormState extends State<CategoryForm> {
       return downloadUrl;
     } catch (e) {
       setState(() => _isUploading = false);
-      print("Image upload error: $e");
       return null;
     }
   }
@@ -105,19 +104,19 @@ class _CategoryFormState extends State<CategoryForm> {
           children: [
             TextFormField(
               controller: _titleController,
-              decoration: InputDecoration(labelText: 'Title'),
+              decoration: const InputDecoration(labelText: 'Title'),
               validator: (value) => value!.isEmpty ? 'Enter title' : null,
             ),
             TextFormField(
               controller: _descriptionController,
-              decoration: InputDecoration(labelText: 'Description'),
+              decoration: const InputDecoration(labelText: 'Description'),
               validator: (value) => value!.isEmpty ? 'Enter description' : null,
             ),
             TextFormField(
               controller: _imageController,
-              decoration: InputDecoration(labelText: 'Image URL'),
+              decoration: const InputDecoration(labelText: 'Image URL'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _selectedImage != null
                 ? Image.file(_selectedImage!, height: 100)
                 : widget.category != null && widget.category!.image.isNotEmpty
@@ -125,16 +124,16 @@ class _CategoryFormState extends State<CategoryForm> {
                     : Container(),
             ElevatedButton(
               onPressed: _pickImage,
-              child: Text("Choose Image"),
+              child: const Text("Choose Image"),
             ),
-            if (_isUploading) CircularProgressIndicator(),
+            if (_isUploading) const CircularProgressIndicator(),
           ],
         ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
         ),
         ElevatedButton(
           onPressed: _saveCategory,

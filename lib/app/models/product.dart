@@ -5,6 +5,7 @@ class Product {
   late String name;
   late String description;
   late double? price;
+  late int? quantity;
   late String? categoryId;
   late String? status; //sold/stock
   late String? condition; //old new
@@ -20,6 +21,7 @@ class Product {
     required this.name,
     required this.description,
     this.price,
+    this.quantity,
     this.categoryId,
     this.status,
     this.condition,
@@ -32,19 +34,27 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-        id: json['id'],
-        name: json['name'],
-        description: json['description'],
-        price: json['price'].toDouble(),
-        categoryId: json['categoryId'],
-        status: json['status'],
-        condition: json['condition'],
-        image: json['image'],
-        imageSlides: List<String>.from(json['imageSlides']),
-        createdAt: (json['createdAt'] as Timestamp).toDate(),
-        userId: json['userId'],
-        comments: List<String>.from(json['comments']),
-        tradeList: List<String>.from(json['tradeList']),
+        id: json['id'] ?? '',
+        name: json['name'] ?? '',
+        description: json['description'] ?? '',
+        price: (json['price'] ?? 0).toDouble(),
+        quantity: (json['quantity']),
+        categoryId: json['categoryId'] ?? '',
+        status: json['status'] ?? '',
+        condition: json['condition'] ?? '',
+        image: json['image'] ?? '',
+        imageSlides: json['imageSlides'] != null
+            ? List<String>.from(json['imageSlides'] as List)
+            : [],
+        createdAt:
+            (json['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+        userId: json['userId'] ?? '',
+        comments: json['comments'] != null
+            ? List<String>.from(json['comments'] as List)
+            : [],
+        tradeList: json['tradeList'] != null
+            ? List<String>.from(json['tradeList'] as List)
+            : [],
       );
 
   Map<String, dynamic> toJson() => {
@@ -52,6 +62,7 @@ class Product {
         'name': name,
         'description': description,
         'price': price,
+        'quantity': quantity,
         'categoryId': categoryId,
         'status': status,
         'condition': condition,
@@ -62,22 +73,6 @@ class Product {
         'comments': comments,
         'tradeList': tradeList,
       };
-
-  factory Product.fromMap(Map<String, dynamic> data) => Product(
-        id: data['id'],
-        name: data['name'],
-        description: data['description'],
-        price: data['price'],
-        categoryId: data['categoryId'],
-        status: data['status'],
-        condition: data['condition'],
-        image: data['image'],
-        imageSlides: List<String>.from(data['imageSlides']),
-        createdAt: (data['createdAt'] as Timestamp).toDate(),
-        userId: data['userId'],
-        comments: List<String>.from(data['comments']),
-        tradeList: List<String>.from(data['tradeList']),
-      );
 
   String? get productId => null;
 

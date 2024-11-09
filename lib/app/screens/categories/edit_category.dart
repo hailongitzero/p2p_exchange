@@ -7,6 +7,8 @@ import 'category_form.dart';
 class CategoryScreen extends StatelessWidget {
   final CategoryController categoryController = Get.put(CategoryController());
 
+  CategoryScreen({super.key});
+
   void _openCategoryForm(BuildContext context, [Category? category]) {
     showDialog(
       context: context,
@@ -17,10 +19,10 @@ class CategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Categories')),
+      appBar: AppBar(title: const Text('Categories')),
       body: Obx(() {
         if (categoryController.categories.isEmpty) {
-          return Center(child: Text('No categories available.'));
+          return const Center(child: Text('No categories available.'));
         }
         return ListView.builder(
           itemCount: categoryController.categories.length,
@@ -29,7 +31,7 @@ class CategoryScreen extends StatelessWidget {
             return ListTile(
               leading: category.image.isNotEmpty
                   ? Image.network(category.image, width: 50, height: 50)
-                  : Icon(Icons.category),
+                  : const Icon(Icons.category),
               title: Text(category.title),
               subtitle: Text(category.description),
               onTap: () => _openCategoryForm(context, category),
@@ -39,7 +41,7 @@ class CategoryScreen extends StatelessWidget {
       }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openCategoryForm(context),
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

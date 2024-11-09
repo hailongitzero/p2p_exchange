@@ -28,16 +28,6 @@ class UserController extends GetxController {
     userModel.value = UserModel.fromJson(doc.data() as Map<String, dynamic>);
   }
 
-  // Method to get the Firebase User ID
-  Future<User?> _getCurrentUser() async {
-    try {
-      return FirebaseAuth.instance.currentUser;
-    } catch (e) {
-      print("Error fetching Firebase User: $e");
-      return null;
-    }
-  }
-
   Future<void> updateUserData() async {
     String uid = _auth.currentUser?.uid ?? "";
     if (selectedImage.value != null) {

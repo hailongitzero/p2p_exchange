@@ -6,6 +6,8 @@ import 'package:p2p_exchange/app/models/product.dart';
 class ShopHomePage extends StatelessWidget {
   final ProductController productController = Get.put(ProductController());
 
+  ShopHomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -13,7 +15,7 @@ class ShopHomePage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               // Handle back action
             },
@@ -21,7 +23,7 @@ class ShopHomePage extends StatelessWidget {
           title: TextField(
             decoration: InputDecoration(
               hintText: 'Tìm kiếm khẩu trang',
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
@@ -31,13 +33,13 @@ class ShopHomePage extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.filter_alt),
+              icon: const Icon(Icons.filter_alt),
               onPressed: () {
                 // Handle filter action
               },
             ),
           ],
-          bottom: TabBar(
+          bottom: const TabBar(
             isScrollable: true,
             tabs: [
               Tab(text: 'Liên quan'),
@@ -50,8 +52,8 @@ class ShopHomePage extends StatelessWidget {
         body: TabBarView(
           children: [
             ProductGridView(),
-            Center(child: Text('Mới nhất')),
-            Center(child: Text('Bán chạy')),
+            const Center(child: Text('Mới nhất')),
+            const Center(child: Text('Bán chạy')),
             PriceSortView(), // Updated Price tab with GetX sorting
           ],
         ),
@@ -64,12 +66,14 @@ class ShopHomePage extends StatelessWidget {
 class ProductGridView extends StatelessWidget {
   final ProductController productController = Get.find();
 
+  ProductGridView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       return GridView.builder(
         padding: const EdgeInsets.all(8.0),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
@@ -88,6 +92,8 @@ class ProductGridView extends StatelessWidget {
 // Widget for sorting products by price
 class PriceSortView extends StatelessWidget {
   final ProductController productController = Get.find();
+
+  PriceSortView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +122,7 @@ class PriceSortView extends StatelessWidget {
           child: Obx(() {
             return GridView.builder(
               padding: const EdgeInsets.all(8.0),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,
@@ -139,7 +145,7 @@ class PriceSortView extends StatelessWidget {
 class ProductCard extends StatelessWidget {
   final Product product;
 
-  const ProductCard({required this.product});
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +166,8 @@ class ProductCard extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               product.name,
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              style:
+                  const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -171,13 +178,13 @@ class ProductCard extends StatelessWidget {
               children: [
                 Text(
                   "${product.price}đ",
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16.0,
                     color: Colors.red,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(width: 5.0),
+                const SizedBox(width: 5.0),
                 // Text(
                 //   "${product['old_price']}đ",
                 //   style: TextStyle(

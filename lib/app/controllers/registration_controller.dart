@@ -76,7 +76,7 @@ class RegistrationController extends GetxController {
 
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
+          MaterialPageRoute(builder: (context) => const LoginPage()),
           (route) => false, // Remove all previous routes
         );
       }

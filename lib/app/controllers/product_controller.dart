@@ -1,5 +1,6 @@
 // controllers/product_controller.dart
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path/path.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -15,6 +16,8 @@ class ProductController extends GetxController {
   var categories = <Category>[].obs;
   var product = Rxn<Product>();
   var products = <Product>[].obs;
+  var myProducts = <Product>[].obs;
+  var saleProducts = <Product>[].obs;
   var imageSlidesUrls = <String>[].obs; // To hold image slides URLs
   var isImageSlidesUploading = false.obs;
   var mainImageUrl = ''.obs; // To hold the main image URL
@@ -43,7 +46,6 @@ class ProductController extends GetxController {
       isMainImageUploading.value = false;
     } catch (e) {
       isMainImageUploading.value = false;
-      print("Error picking/uploading image: $e");
     }
   }
 
@@ -52,7 +54,7 @@ class ProductController extends GetxController {
     try {
       final pickedFiles = await _picker.pickMultiImage();
       isImageSlidesUploading.value = true;
-      if (pickedFiles != null) {
+      if (pickedFiles.isNotEmpty) {
         for (var file in pickedFiles) {
           String downloadUrl =
               await _uploadImage(File(file.path), 'slide_images');
@@ -62,7 +64,6 @@ class ProductController extends GetxController {
       isImageSlidesUploading.value = false;
     } catch (e) {
       isImageSlidesUploading.value = false;
-      print("Error picking/uploading image: $e");
     }
   }
 
@@ -87,11 +88,14 @@ class ProductController extends GetxController {
       'name': editProduct.name,
       'description': editProduct.description,
       'price': editProduct.price,
+      'quantity': editProduct.quantity,
       'categoryId': editProduct.categoryId,
       'image': editProduct.image,
       'imageSlides': editProduct.imageSlides,
-      'createdAt': editProduct.createdAt,
-      'userId': editProduct.userId,
+      'status': 'Stock',
+      'condition': editProduct.condition,
+      'createdAt': DateTime.now(),
+      'userId': getCurrentUserId(),
       'comments': editProduct.comments,
       'tradeList': editProduct.tradeList,
     });
@@ -104,7 +108,7 @@ class ProductController extends GetxController {
   Future<void> loadProduct(String productId) async {
     var snapshot = await _firestore.collection('products').doc(productId).get();
     if (snapshot.exists) {
-      product.value = Product.fromMap(snapshot.data()!);
+      product.value = Product.fromJson(snapshot.data()!);
     }
   }
 
@@ -112,8 +116,49 @@ class ProductController extends GetxController {
   Future<void> loadProducts(String productId) async {
     var snapshot = await _firestore.collection('products').doc(productId).get();
     if (snapshot.exists) {
-      product.value = Product.fromMap(snapshot.data()!);
+      product.value = Product.fromJson(snapshot.data()!);
     }
+  }
+
+  // Load product details if updating
+  Future<void> loadMyProducts() async {
+    try {
+      // Query Firestore for products with the specified userId
+      var snapshot = await _firestore
+          .collection('products')
+          .where('userId', isEqualTo: getCurrentUserId())
+          .get();
+
+      // Map the documents to Product objects and add to myProducts
+      myProducts.value =
+          snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList();
+    } catch (e) {
+      // Handle errors here, like logging or showing an error message
+      myProducts.value = [];
+    }
+  }
+
+  Future<void> loadMySaleProducts() async {
+    try {
+      // Query Firestore for products with the specified userId
+      var snapshot = await _firestore
+          .collection('products')
+          .where('userId', isEqualTo: getCurrentUserId())
+          .where('status', isEqualTo: 'Stock')
+          .get();
+
+      // Map the documents to Product objects and add to myProducts
+      saleProducts.value =
+          snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList();
+    } catch (e) {
+      // Handle errors here, like logging or showing an error message
+      saleProducts.value = [];
+    }
+  }
+
+  String? getCurrentUserId() {
+    final user = FirebaseAuth.instance.currentUser;
+    return user?.uid;
   }
 
   // Method to sort products based on sort order

@@ -6,6 +6,8 @@ import 'package:p2p_exchange/app/controllers/user_controller.dart';
 class UserUpdatePage extends StatelessWidget {
   final UserController _controller = Get.put(UserController());
 
+  UserUpdatePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
