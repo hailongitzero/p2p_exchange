@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 class ThemeApp {
   static final light = ThemeData(
+      useMaterial3: true,
       brightness: Brightness.light,
-      primaryColor: Colors.blue,
+      // primaryColor: Colors.blue,
+      // colorSchemeSeed: Colors.blueAccent,
+      fontFamily: 'Roboto',
       appBarTheme: const AppBarTheme(color: Colors.blue),
       textTheme: const TextTheme(
           displayLarge: TextStyle(
@@ -18,8 +21,11 @@ class ThemeApp {
           )));
 
   static final dart = ThemeData(
+      useMaterial3: true,
       brightness: Brightness.dark,
-      primaryColor: Colors.orange,
+      // primaryColor: Colors.blue,
+      // colorSchemeSeed: Colors.blueAccent,
+      fontFamily: 'Roboto',
       appBarTheme: const AppBarTheme(
         color: Colors.orange,
       ),

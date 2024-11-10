@@ -156,6 +156,24 @@ class ProductController extends GetxController {
     }
   }
 
+  Future<void> loadMoreSaleProducts() async {
+    try {
+      // Query Firestore for products with the specified userId
+      var snapshot = await _firestore
+          .collection('products')
+          .where('userId', isEqualTo: getCurrentUserId())
+          .where('status', isEqualTo: 'Stock')
+          .get();
+
+      // Map the documents to Product objects and add to myProducts
+      saleProducts.value =
+          snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList();
+    } catch (e) {
+      // Handle errors here, like logging or showing an error message
+      saleProducts.value = [];
+    }
+  }
+
   String? getCurrentUserId() {
     final user = FirebaseAuth.instance.currentUser;
     return user?.uid;

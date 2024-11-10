@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:p2p_exchange/app/models/product.dart';
-import 'package:p2p_exchange/app/screens/my_home/edit_product.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -59,7 +58,7 @@ class ProductCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4.0),
                         ),
                         child: Text(
-                          product.status!,
+                          product.condition!,
                           style: const TextStyle(
                             fontSize: 12.0,
                             color: Colors.white,
@@ -73,40 +72,6 @@ class ProductCard extends StatelessWidget {
                             const TextStyle(fontSize: 12.0, color: Colors.grey),
                       ),
               )),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Add other widgets here if needed
-                const Spacer(), // This pushes the button to the right
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: const Size(40, 40),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: IconButton(
-                    icon: const Icon(Icons.edit, color: Colors.blue),
-                    onPressed: () {
-                      // Handle edit button click
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return EditProduct(product: product);
-                        },
-                      );
-                    },
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );

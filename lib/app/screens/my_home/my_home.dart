@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:p2p_exchange/app/controllers/product_controller.dart';
 import 'package:p2p_exchange/app/screens/my_home/edit_product.dart';
+import 'package:p2p_exchange/app/screens/my_home/filter_drawer.dart';
 import 'package:p2p_exchange/app/screens/my_home/my_products.dart';
 import 'package:p2p_exchange/app/screens/my_home/on_sale_products.dart';
 
@@ -23,6 +24,7 @@ class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   final ProductController productController = Get.put(ProductController());
   late TabController _tabController;
+  final myHomeKey = GlobalKey();
 
   @override
   void initState() {
@@ -58,6 +60,26 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      key: myHomeKey,
+      navigationBar: CupertinoNavigationBar(
+        leading: IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              CupertinoIcons.gear,
+              size: 20,
+            )),
+        middle: const Text(''),
+        trailing: IconButton(
+            onPressed: () {},
+            icon: const Icon(CupertinoIcons.person_solid, size: 20)),
+        previousPageTitle: '',
+      ),
+      child: SafeArea(child: _buildBody()),
+    );
+  }
+
+  Widget _buildBody() {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -104,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage>
         body: TabBarView(
           controller: _tabController,
           children: [
-            OnSaleProducts(),
+            const OnSaleProducts(),
             MyProducts(),
             const Center(child: Text('Bán chạy')),
             // PriceSortView(),
@@ -127,48 +149,6 @@ class _MyHomePageState extends State<MyHomePage>
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      ),
-    );
-  }
-}
-
-class FilterDrawer extends StatelessWidget {
-  const FilterDrawer({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.orange,
-            ),
-            child: Text(
-              'Bộ lọc',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.filter_list),
-            title: const Text('Filter Option 1'),
-            onTap: () {
-              // Handle filter option
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.filter_list),
-            title: const Text('Filter Option 2'),
-            onTap: () {
-              // Handle filter option
-            },
-          ),
-          // Add more filter options here
-        ],
       ),
     );
   }

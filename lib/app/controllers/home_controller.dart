@@ -4,11 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:p2p_exchange/app/models/category.dart';
 import 'package:p2p_exchange/app/models/product.dart';
 
-class ProductController extends GetxController {
+class HomeController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   var categories = <Category>[].obs;
   var product = Rxn<Product>();
   var products = <Product>[].obs;
+  var slides = <Product>[].obs;
   var sortOrder = 'Giá tăng dần'.obs; // RxString for sort order
 
   // Load categories from Firebase
@@ -23,6 +24,22 @@ class ProductController extends GetxController {
     var snapshot = await _firestore.collection('products').doc(productId).get();
     if (snapshot.exists) {
       product.value = Product.fromJson(snapshot.data()!);
+    }
+  }
+
+  Future<void> loadSlideProducts() async {
+    try {
+      var snapshot = await _firestore
+          .collection('products')
+          .where('status', isEqualTo: 'Stock')
+          .orderBy('createAt', descending: true)
+          .limit(5)
+          .get();
+
+      slides.value =
+          snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList();
+    } catch (e) {
+      return;
     }
   }
 

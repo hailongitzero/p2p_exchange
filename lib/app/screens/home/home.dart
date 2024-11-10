@@ -1,7 +1,10 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:p2p_exchange/app/controllers/home_controller.dart';
 import 'package:p2p_exchange/app/controllers/slide_controller.dart';
+import 'package:get/get.dart';
+import 'package:p2p_exchange/app/screens/home/product_card.dart';
+import 'package:p2p_exchange/app/screens/home/slide_item.dart';
 
 class HomePage extends StatefulWidget {
   static const title = 'Home';
@@ -9,9 +12,7 @@ class HomePage extends StatefulWidget {
     CupertinoIcons.home,
     size: 25,
   );
-  const HomePage({
-    super.key,
-  });
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -19,19 +20,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final homeKey = GlobalKey();
-  final List<Map<String, String>> imgList = [
-    {'image': 'https://placehold.co/400', 'title': 'Featured Product 1'},
-    {'image': 'https://placehold.co/400', 'title': 'Featured Product 2'},
-    {'image': 'https://placehold.co/400', 'title': 'Featured Product 3'},
-  ];
-  final SlideController slideController = SlideController();
+  final SlideController slideController = Get.put(SlideController());
+  final HomeController homeController = Get.put(HomeController());
+
   @override
   void initState() {
     super.initState();
-    slideController.fetchSlides();
+    slideController.loadSlideProducts();
+    homeController.loadProducts();
   }
 
   Widget _buildBody() {
+    final textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         Padding(
@@ -68,132 +68,63 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        CarouselSlider(
-          options: CarouselOptions(
-            height: 250,
-            autoPlay: true,
-            enlargeCenterPage: true,
-          ),
-          items: slideController.slides
-              .map((item) => Container(
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Image.network(
-                          item.image,
-                          fit: BoxFit.cover,
-                          width: 1000,
-                          errorBuilder: (BuildContext context, Object exception,
-                              StackTrace? stackTrace) {
-                            return Image.asset('lib/assets/images/400.png');
-                          },
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              color: Colors.black54,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              child: Text(
-                                item.title,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            ElevatedButton(
-                              onPressed: () {
-                                // Implement navigation or action
-                              },
-                              child: const Text('Shop Now'),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ))
-              .toList(),
-        ),
-        const Padding(
-          padding: EdgeInsets.all(16.0),
+
+        // Wrap with Obx to update the UI when productSlides changes
+        Obx(() {
+          if (slideController.productSlides.isEmpty) {
+            return const Center(
+                child:
+                    CircularProgressIndicator()); // Show loading if data is empty
+          } else {
+            // Product slide
+            return SlideItem(
+              productSlides: slideController.productSlides,
+            );
+          }
+        }),
+
+        Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
               'Products',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+              style: textTheme
+                  .copyWith(
+                      titleLarge: textTheme.titleLarge!.copyWith(
+                          color: Colors.red, fontWeight: FontWeight.bold))
+                  .titleLarge,
+            ),
+          ),
+        ),
+
+        // GridView displaying products
+        Obx(() {
+          if (homeController.products.isEmpty) {
+            return const Center(
+                child:
+                    CircularProgressIndicator()); // Show loading if products are empty
+          } else {
+            return Expanded(
+              child: GridView.builder(
+                padding: const EdgeInsets.all(16.0),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16.0,
+                  crossAxisSpacing: 16.0,
+                  childAspectRatio: 2 / 3,
+                ),
+                itemCount: homeController.products.length,
+                itemBuilder: (context, index) {
+                  final product = homeController.products[index];
+                  return ProductCard(
+                    product: product,
+                  );
+                },
               ),
-            ),
-          ),
-        ),
-        Expanded(
-          child: GridView.builder(
-            padding: const EdgeInsets.all(16.0),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 16.0,
-              crossAxisSpacing: 16.0,
-              childAspectRatio: 2 / 3,
-            ),
-            itemCount: 10, // Replace with your actual product count
-            itemBuilder: (context, index) {
-              return Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                elevation: 2.0,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(15.0)),
-                        child: Image.network(
-                          'https://placehold.co/150', // Replace with your actual product image URL
-                          fit: BoxFit.cover,
-                          errorBuilder: (BuildContext context, Object exception,
-                              StackTrace? stackTrace) {
-                            return Image.asset('lib/assets/images/400.png');
-                          },
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Product Name',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4.0),
-                          const Text('\$19.99'),
-                          const SizedBox(height: 10.0),
-                          Center(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // Implement navigation or action
-                              },
-                              child: const Text('Add to Cart'),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
+            );
+          }
+        }),
       ],
     );
   }
