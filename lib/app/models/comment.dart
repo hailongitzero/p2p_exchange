@@ -1,20 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Comment {
-  final String id;
-  final String userId;
-  final String productId;
-  final String content;
-  final DateTime createdAt;
-  final int likes;
+  late String? id;
+  late String? userId;
+  late String? productId;
+  late String? content;
+  late List<String>? images;
+  late DateTime? createdAt;
+  late int? likes;
 
   Comment({
-    required this.id,
-    required this.userId,
-    required this.productId,
-    required this.content,
-    required this.createdAt,
-    required this.likes,
+    this.id,
+    this.userId,
+    this.productId,
+    this.content,
+    this.images,
+    this.createdAt,
+    this.likes,
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
@@ -22,16 +24,28 @@ class Comment {
         userId: json['userId'],
         productId: json['productId'],
         content: json['content'],
+        images: json['images'],
         createdAt: (json['createdAt'] as Timestamp).toDate(),
         likes: json['likes'],
       );
+
+  factory Comment.fromMap(Map<String, dynamic> map) {
+    return Comment(
+      userId: map['userId'],
+      content: map['content'],
+      createdAt: (map['createdAt'] as Timestamp).toDate(),
+      likes: map['likes'],
+      images: List<String>.from(map['images'] ?? []),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'userId': userId,
         'productId': productId,
         'content': content,
-        'createdAt': Timestamp.fromDate(createdAt),
+        'images': images,
+        'createdAt': createdAt,
         'likes': likes,
       };
 }

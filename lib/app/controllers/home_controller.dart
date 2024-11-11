@@ -36,8 +36,9 @@ class HomeController extends GetxController {
           .limit(5)
           .get();
 
-      slides.value =
-          snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList();
+      slides.value = snapshot.docs
+          .map((doc) => Product.fromDocumentSnapshot(doc))
+          .toList();
     } catch (e) {
       return;
     }
@@ -53,8 +54,9 @@ class HomeController extends GetxController {
           .get();
 
       // Map the documents to Product objects and add to myProducts
-      products.value =
-          snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList();
+      products.value = snapshot.docs
+          .map((doc) => Product.fromDocumentSnapshot(doc))
+          .toList();
     } catch (e) {
       // Handle errors here, like logging or showing an error message
     }

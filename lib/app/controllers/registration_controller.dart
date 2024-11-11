@@ -95,7 +95,7 @@ class RegistrationController extends GetxController {
         'email': user.email,
         'displayName': user.displayName ?? '',
         'photoURL': user.photoURL ?? '',
-        'createdAt': Timestamp.now(),
+        'createdAt': DateTime.now(),
       });
     } catch (e) {
       errorMessage.value = 'Failed to save user data: ${e.toString()}';

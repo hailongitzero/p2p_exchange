@@ -65,6 +65,14 @@ class _EditProductState extends State<EditProduct> {
               }),
             ),
             TextFormField(
+              initialValue: productController.product.value?.wishes,
+              maxLines: 5,
+              decoration: const InputDecoration(labelText: 'Wishes'),
+              onChanged: (value) => productController.product.update((prod) {
+                prod?.wishes = value;
+              }),
+            ),
+            TextFormField(
               initialValue: productController.product.value?.price?.toString(),
               decoration: const InputDecoration(labelText: 'Price'),
               keyboardType: TextInputType.number,

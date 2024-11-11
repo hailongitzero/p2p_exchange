@@ -2,7 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:p2p_exchange/app/controllers/comment_controller.dart';
+import 'package:p2p_exchange/app/models/comment.dart';
 import 'package:p2p_exchange/app/models/product.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -17,23 +20,24 @@ class ProductDetail extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetail> {
-  final TextEditingController _commentController = TextEditingController();
+  final CommentController commentController = CommentController();
   final productDetailKey = GlobalKey();
   String formatCurrency(double amount) {
     final formatCurrency = NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
     return formatCurrency.format(amount);
   }
 
-  // Function to handle adding a new comment
-  void _addComment() {
-    if (_commentController.text.isNotEmpty) {
-      setState(() {
-        widget.product.comments = (widget.product.comments ?? [])
-          ..add(_commentController.text);
-      });
-      _commentController.clear();
-      Navigator.of(context).pop(); // Close the modal after adding a comment
-    }
+  @override
+  void dispose() {
+    // Clean up any resources here, e.g., timers, streams, etc.
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize product if it's null, otherwise set the provided product
+    commentController.comment.value = Comment();
   }
 
   // Function to open the comment modal
@@ -43,21 +47,85 @@ class _ProductDetailScreenState extends State<ProductDetail> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Add a Comment"),
-          content: TextField(
-            controller: _commentController,
-            maxLines: 3,
-            decoration:
-                const InputDecoration(hintText: "Type your comment here..."),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  initialValue: commentController.comment.value?.content,
+                  maxLines: 5,
+                  decoration: const InputDecoration(labelText: 'Comment'),
+                  onChanged: (value) => commentController.comment.update((cmd) {
+                    cmd?.content = value;
+                  }),
+                ),
+                const SizedBox(height: 16.0),
+                Obx(() => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (commentController.isImagesUploading.value)
+                          const Padding(
+                            padding: EdgeInsets.only(left: 16.0),
+                            child: CircularProgressIndicator(),
+                          )
+                        else if (commentController.imagesUrls.isNotEmpty)
+                          Wrap(
+                            spacing: 8.0,
+                            children: commentController.imagesUrls
+                                .map((url) => Image.network(
+                                      url,
+                                      width: 100,
+                                      height: 100,
+                                    ))
+                                .toList(),
+                          )
+                        else if (!(commentController
+                                .comment.value?.images?.isEmpty ??
+                            true))
+                          Wrap(
+                            spacing: 8.0,
+                            children: commentController.comment.value!.images!
+                                .map((url) => Image.network(
+                                      url,
+                                      width: 100,
+                                      height: 100,
+                                    ))
+                                .toList(),
+                          )
+                        else
+                          Container(),
+                        const SizedBox(height: 16.0),
+                        ElevatedButton(
+                          onPressed: commentController.isImagesUploading.value
+                              ? null
+                              : () async {
+                                  await commentController.pickAndUploadImages();
+                                },
+                          child: const Text('Pick Slide Images'),
+                        ),
+                      ],
+                    )),
+              ],
+            ),
           ),
           actions: [
             TextButton(
               child: const Text("Cancel"),
               onPressed: () => Navigator.of(context).pop(),
             ),
-            ElevatedButton(
-              onPressed: _addComment,
-              child: const Text("Submit"),
-            ),
+            Obx(() => ElevatedButton(
+                  onPressed: commentController.isImagesUploading.value
+                      ? null
+                      : () async {
+                          await commentController.updateProductComments(
+                              widget.product.id!,
+                              commentController.comment.value!);
+                          Navigator.of(context)
+                              .pop(); // Close dialog after submitting
+                        },
+                  child: const Text("Submit"),
+                )),
           ],
         );
       },
@@ -220,7 +288,7 @@ class _ProductDetailScreenState extends State<ProductDetail> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Text(
-                          comment,
+                          commentController.comment.value!.content ?? '',
                           style: TextStyle(
                             color: isSelfComment
                                 ? Colors.blue.shade900

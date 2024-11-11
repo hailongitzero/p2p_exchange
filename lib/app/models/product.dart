@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:p2p_exchange/app/models/comment.dart';
 
 class Product {
   late String? id;
   late String name;
   late String description;
+  late String? wishes;
   late double? price;
   late int? quantity;
   late String? categoryId;
@@ -13,7 +15,7 @@ class Product {
   late List<String>? imageSlides; // additional images for slideshow
   late DateTime? createdAt;
   late String userId;
-  late List<String>? comments;
+  late List<Comment>? comments;
   late List<String>? tradeList;
 
   Product({
@@ -25,6 +27,7 @@ class Product {
     this.categoryId,
     this.status,
     this.condition,
+    this.wishes,
     this.image,
     this.imageSlides,
     this.createdAt,
@@ -33,10 +36,39 @@ class Product {
     this.tradeList,
   });
 
+  factory Product.fromDocumentSnapshot(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>?;
+    return Product(
+      id: doc.id,
+      name: data?['name'] ?? '',
+      description: data?['description'] ?? '',
+      wishes: data?['wishes'] ?? '',
+      price: (data?['price'] ?? 0).toDouble(),
+      quantity: data?['quantity'] ?? 0,
+      categoryId: data?['categoryId'] ?? '',
+      status: data?['status'] ?? '',
+      condition: data?['condition'] ?? '',
+      image: data?['image'] ?? '',
+      imageSlides: data?['imageSlides'] != null
+          ? List<String>.from(data?['imageSlides'] as List)
+          : [],
+      createdAt: (data?['createdAt'] as Timestamp).toDate(),
+      userId: data?['userId'] ?? '',
+      comments: data?['comments'] != null
+          ? List<Comment>.from((data?['comments'] as List)
+              .map((item) => Comment.fromMap(item as Map<String, dynamic>)))
+          : [],
+      tradeList: data?['tradeList'] != null
+          ? List<String>.from(data?['tradeList'] as List)
+          : [],
+    );
+  }
+
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json['id'] ?? '',
         name: json['name'] ?? '',
         description: json['description'] ?? '',
+        wishes: json['wishes'] ?? '',
         price: (json['price'] ?? 0).toDouble(),
         quantity: (json['quantity']),
         categoryId: json['categoryId'] ?? '',
@@ -46,11 +78,11 @@ class Product {
         imageSlides: json['imageSlides'] != null
             ? List<String>.from(json['imageSlides'] as List)
             : [],
-        createdAt:
-            (json['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+        createdAt: (json['createdAt'] as Timestamp).toDate(),
         userId: json['userId'] ?? '',
-        comments: json['comments'] != null
-            ? List<String>.from(json['comments'] as List)
+        comments: json?['comments'] != null
+            ? List<Comment>.from((json?['comments'] as List)
+                .map((item) => Comment.fromMap(item as Map<String, dynamic>)))
             : [],
         tradeList: json['tradeList'] != null
             ? List<String>.from(json['tradeList'] as List)
@@ -61,6 +93,7 @@ class Product {
         'id': id,
         'name': name,
         'description': description,
+        'wishes': wishes,
         'price': price,
         'quantity': quantity,
         'categoryId': categoryId,
@@ -68,7 +101,7 @@ class Product {
         'condition': condition,
         'image': image,
         'imageSlides': imageSlides,
-        'createdAt': Timestamp.fromDate(createdAt!),
+        'createdAt': createdAt,
         'userId': userId,
         'comments': comments,
         'tradeList': tradeList,

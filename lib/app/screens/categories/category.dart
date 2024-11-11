@@ -76,4 +76,46 @@ class CategoryScreen extends StatelessWidget {
       ),
     );
   }
+
+  void _openFilterDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Filter Options'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CheckboxListTile(
+                title: const Text('Option 1'),
+                value: false,
+                onChanged: (bool? value) {},
+              ),
+              CheckboxListTile(
+                title: const Text('Option 2'),
+                value: false,
+                onChanged: (bool? value) {},
+              ),
+              // Add more filter options as needed
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Implement filter logic here
+              },
+              child: const Text('Apply'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

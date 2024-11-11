@@ -5,6 +5,7 @@ import 'package:p2p_exchange/app/controllers/slide_controller.dart';
 import 'package:get/get.dart';
 import 'package:p2p_exchange/app/screens/home/product_card.dart';
 import 'package:p2p_exchange/app/screens/home/slide_item.dart';
+import 'package:p2p_exchange/app/screens/product_detail/product_detail.dart';
 
 class HomePage extends StatefulWidget {
   static const title = 'Home';
@@ -55,7 +56,11 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () {
-                  _openFilterDialog(context);
+                  // Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) =>
+                  //               ProductDetail(product: product)));
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -63,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   padding: const EdgeInsets.all(16),
                 ),
-                child: const Icon(Icons.filter_list),
+                child: const Icon(Icons.search),
               ),
             ],
           ),
@@ -126,48 +131,6 @@ class _HomePageState extends State<HomePage> {
           }
         }),
       ],
-    );
-  }
-
-  void _openFilterDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Filter Options'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CheckboxListTile(
-                title: const Text('Option 1'),
-                value: false,
-                onChanged: (bool? value) {},
-              ),
-              CheckboxListTile(
-                title: const Text('Option 2'),
-                value: false,
-                onChanged: (bool? value) {},
-              ),
-              // Add more filter options as needed
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                // Implement filter logic here
-              },
-              child: const Text('Apply'),
-            ),
-          ],
-        );
-      },
     );
   }
 

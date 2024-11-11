@@ -130,8 +130,9 @@ class ProductController extends GetxController {
           .get();
 
       // Map the documents to Product objects and add to myProducts
-      myProducts.value =
-          snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList();
+      myProducts.value = snapshot.docs
+          .map((doc) => Product.fromDocumentSnapshot(doc))
+          .toList();
     } catch (e) {
       // Handle errors here, like logging or showing an error message
       myProducts.value = [];
@@ -147,9 +148,12 @@ class ProductController extends GetxController {
           .where('status', isEqualTo: 'Stock')
           .get();
 
+      saleProducts.value = snapshot.docs
+          .map((doc) => Product.fromDocumentSnapshot(doc))
+          .toList();
       // Map the documents to Product objects and add to myProducts
-      saleProducts.value =
-          snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList();
+      // saleProducts.value =
+      //     snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList();
     } catch (e) {
       // Handle errors here, like logging or showing an error message
       saleProducts.value = [];
