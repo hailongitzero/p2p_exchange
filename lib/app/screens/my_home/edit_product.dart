@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:p2p_exchange/app/controllers/categories_controller.dart';
 import 'package:p2p_exchange/app/controllers/product_condition_controller.dart';
-import 'package:p2p_exchange/app/controllers/product_controller.dart';
+import 'package:p2p_exchange/app/controllers/my_home_controller.dart';
 import 'package:p2p_exchange/app/models/category.dart';
 import 'package:p2p_exchange/app/models/product.dart';
 import 'package:p2p_exchange/app/models/product_condition.dart';
@@ -17,7 +17,7 @@ class EditProduct extends StatefulWidget {
 }
 
 class _EditProductState extends State<EditProduct> {
-  final ProductController productController = Get.put(ProductController());
+  final MyHomeController myHomeController = Get.put(MyHomeController());
   final CategoryController categoryController = Get.put(CategoryController());
   final ProductConditionController conditionController =
       Get.put(ProductConditionController());
@@ -32,7 +32,7 @@ class _EditProductState extends State<EditProduct> {
   void initState() {
     super.initState();
     // Initialize product if it's null, otherwise set the provided product
-    productController.product.value =
+    myHomeController.product.value =
         widget.product ?? Product(name: '', description: '', userId: '');
   }
 
@@ -40,7 +40,7 @@ class _EditProductState extends State<EditProduct> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(productController.product.value?.id == null
+          title: Text(myHomeController.product.value?.id == null
               ? 'Add Product'
               : 'Update Product')),
       body: SingleChildScrollView(
@@ -50,42 +50,42 @@ class _EditProductState extends State<EditProduct> {
           mainAxisSize: MainAxisSize.min,
           children: [
             TextFormField(
-              initialValue: productController.product.value?.name,
+              initialValue: myHomeController.product.value?.name,
               decoration: const InputDecoration(labelText: 'Product Name'),
-              onChanged: (value) => productController.product.update((prod) {
+              onChanged: (value) => myHomeController.product.update((prod) {
                 prod?.name = value;
               }),
             ),
             TextFormField(
-              initialValue: productController.product.value?.description,
+              initialValue: myHomeController.product.value?.description,
               maxLines: 5,
               decoration: const InputDecoration(labelText: 'Description'),
-              onChanged: (value) => productController.product.update((prod) {
+              onChanged: (value) => myHomeController.product.update((prod) {
                 prod?.description = value;
               }),
             ),
             TextFormField(
-              initialValue: productController.product.value?.wishes,
+              initialValue: myHomeController.product.value?.wishes,
               maxLines: 5,
               decoration: const InputDecoration(labelText: 'Wishes'),
-              onChanged: (value) => productController.product.update((prod) {
+              onChanged: (value) => myHomeController.product.update((prod) {
                 prod?.wishes = value;
               }),
             ),
             TextFormField(
-              initialValue: productController.product.value?.price?.toString(),
+              initialValue: myHomeController.product.value?.price?.toString(),
               decoration: const InputDecoration(labelText: 'Price'),
               keyboardType: TextInputType.number,
-              onChanged: (value) => productController.product.update((prod) {
+              onChanged: (value) => myHomeController.product.update((prod) {
                 prod?.price = double.tryParse(value) ?? 0;
               }),
             ),
             TextFormField(
               initialValue:
-                  productController.product.value?.quantity?.toString(),
+                  myHomeController.product.value?.quantity?.toString(),
               decoration: const InputDecoration(labelText: 'Quantity'),
               keyboardType: TextInputType.number,
-              onChanged: (value) => productController.product.update((prod) {
+              onChanged: (value) => myHomeController.product.update((prod) {
                 prod?.quantity = int.parse(value);
               }),
             ),
@@ -93,7 +93,7 @@ class _EditProductState extends State<EditProduct> {
               width: double.infinity,
               child: Obx(() {
                 String? selectedCondition =
-                    productController.product.value?.condition;
+                    myHomeController.product.value?.condition;
                 if (!conditionController.conditions
                     .map((condition) => condition.id)
                     .contains(selectedCondition)) {
@@ -113,8 +113,7 @@ class _EditProductState extends State<EditProduct> {
                       child: Text(condition.meaning),
                     );
                   }).toList(),
-                  onChanged: (value) =>
-                      productController.product.update((prod) {
+                  onChanged: (value) => myHomeController.product.update((prod) {
                     prod?.condition = value!;
                   }),
                 );
@@ -124,7 +123,7 @@ class _EditProductState extends State<EditProduct> {
               width: double.infinity,
               child: Obx(() {
                 String? selectedCategory =
-                    productController.product.value?.categoryId;
+                    myHomeController.product.value?.categoryId;
                 if (!categoryController.categories
                     .map((category) => category.id)
                     .contains(selectedCategory)) {
@@ -143,8 +142,7 @@ class _EditProductState extends State<EditProduct> {
                       child: Text(category.title),
                     );
                   }).toList(),
-                  onChanged: (value) =>
-                      productController.product.update((prod) {
+                  onChanged: (value) => myHomeController.product.update((prod) {
                     prod?.categoryId = value!;
                   }),
                 );
@@ -153,26 +151,26 @@ class _EditProductState extends State<EditProduct> {
             Obx(() => Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (productController.isMainImageUploading.value)
+                    if (myHomeController.isMainImageUploading.value)
                       const Padding(
                         padding: EdgeInsets.only(left: 16.0),
                         child: CircularProgressIndicator(),
                       )
-                    else if (productController.mainImageUrl.isNotEmpty)
+                    else if (myHomeController.mainImageUrl.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(left: 16.0),
                         child: Image.network(
-                          productController.mainImageUrl.value,
+                          myHomeController.mainImageUrl.value,
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,
                         ),
                       )
-                    else if (productController.product.value?.image != null)
+                    else if (myHomeController.product.value?.image != null)
                       Padding(
                         padding: const EdgeInsets.only(left: 16.0),
                         child: Image.network(
-                          productController.product.value!.image!,
+                          myHomeController.product.value!.image!,
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,
@@ -181,10 +179,10 @@ class _EditProductState extends State<EditProduct> {
                     else
                       Container(),
                     ElevatedButton(
-                      onPressed: productController.isMainImageUploading.value
+                      onPressed: myHomeController.isMainImageUploading.value
                           ? null
                           : () async {
-                              await productController.pickAndUploadMainImage();
+                              await myHomeController.pickAndUploadMainImage();
                             },
                       child: const Text('Pick Main Image'),
                     ),
@@ -193,25 +191,25 @@ class _EditProductState extends State<EditProduct> {
             Obx(() => Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (productController.isImageSlidesUploading.value)
+                    if (myHomeController.isImageSlidesUploading.value)
                       const Padding(
                         padding: EdgeInsets.only(left: 16.0),
                         child: CircularProgressIndicator(),
                       )
-                    else if (productController.imageSlidesUrls.isNotEmpty)
+                    else if (myHomeController.imageSlidesUrls.isNotEmpty)
                       Wrap(
                         spacing: 8.0,
-                        children: productController.imageSlidesUrls
+                        children: myHomeController.imageSlidesUrls
                             .map((url) =>
                                 Image.network(url, width: 100, height: 100))
                             .toList(),
                       )
-                    else if (!(productController
+                    else if (!(myHomeController
                             .product.value?.imageSlides?.isEmpty ??
                         true))
                       Wrap(
                         spacing: 8.0,
-                        children: productController.product.value!.imageSlides!
+                        children: myHomeController.product.value!.imageSlides!
                             .map((url) =>
                                 Image.network(url, width: 100, height: 100))
                             .toList(),
@@ -219,11 +217,10 @@ class _EditProductState extends State<EditProduct> {
                     else
                       Container(),
                     ElevatedButton(
-                      onPressed: productController.isImageSlidesUploading.value
+                      onPressed: myHomeController.isImageSlidesUploading.value
                           ? null
                           : () async {
-                              await productController
-                                  .pickAndUploadSlideImages();
+                              await myHomeController.pickAndUploadSlideImages();
                             },
                       child: const Text('Pick Slide Images'),
                     ),
@@ -232,14 +229,14 @@ class _EditProductState extends State<EditProduct> {
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: ElevatedButton(
-                onPressed: productController.isMainImageUploading.value ||
-                        productController.isImageSlidesUploading.value
+                onPressed: myHomeController.isMainImageUploading.value ||
+                        myHomeController.isImageSlidesUploading.value
                     ? null
                     : () async {
-                        await productController
-                            .saveProduct(productController.product.value!);
+                        await myHomeController
+                            .saveProduct(myHomeController.product.value!);
                       },
-                child: Text(productController.product.value?.id == null
+                child: Text(myHomeController.product.value?.id == null
                     ? 'Save Product'
                     : 'Update Product'),
               ),

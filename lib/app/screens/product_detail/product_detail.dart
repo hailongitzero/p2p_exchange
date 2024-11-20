@@ -37,6 +37,7 @@ class _ProductDetailScreenState extends State<ProductDetail> {
   void initState() {
     super.initState();
     // Initialize product if it's null, otherwise set the provided product
+    commentController.getProductComments(widget.product.id!);
     commentController.comment.value = Comment();
   }
 
@@ -118,7 +119,7 @@ class _ProductDetailScreenState extends State<ProductDetail> {
                   onPressed: commentController.isImagesUploading.value
                       ? null
                       : () async {
-                          await commentController.updateProductComments(
+                          await commentController.addProductComment(
                               widget.product.id!,
                               commentController.comment.value!);
                           Navigator.of(context)
@@ -269,40 +270,102 @@ class _ProductDetailScreenState extends State<ProductDetail> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8.0),
-                if (widget.product.comments != null &&
-                    widget.product.comments!.isNotEmpty)
-                  ...widget.product.comments!.map((comment) {
-                    bool isSelfComment = comment == widget.currentUserId;
-                    return Align(
-                      alignment: isSelfComment
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 4.0),
-                        padding: const EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                          color: isSelfComment
-                              ? Colors.blue.shade100
-                              : Colors.grey.shade200,
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: Text(
-                          commentController.comment.value!.content ?? '',
-                          style: TextStyle(
-                            color: isSelfComment
-                                ? Colors.blue.shade900
-                                : Colors.black,
+                Obx(() {
+                  final comments = commentController.comments.toList();
+
+                  return Container(
+                    height:
+                        200.0, // Set a fixed height to enable scrolling within this area
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: comments.isNotEmpty
+                        ? ListView.builder(
+                            key: ValueKey(
+                                comments), // Add a unique key based on the comments list
+                            itemCount: comments.length,
+                            itemBuilder: (context, index) {
+                              final comment = comments[index];
+                              bool isSelfComment =
+                                  comment.userId == widget.currentUserId;
+
+                              return Align(
+                                alignment: isSelfComment
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                child: Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 4.0),
+                                  padding: const EdgeInsets.all(10.0),
+                                  decoration: BoxDecoration(
+                                    color: isSelfComment
+                                        ? Colors.blue.shade100
+                                        : Colors.grey.shade200,
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: isSelfComment
+                                        ? CrossAxisAlignment.end
+                                        : CrossAxisAlignment.start,
+                                    children: [
+                                      if (comment.images != null &&
+                                          comment.images!.isNotEmpty)
+                                        SizedBox(
+                                          height: 50.0,
+                                          child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: comment.images!.length,
+                                            itemBuilder: (context, imgIndex) {
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 8.0),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                  child: Image.network(
+                                                    comment.images![imgIndex],
+                                                    width: 50,
+                                                    height: 50,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      const SizedBox(height: 4.0),
+                                      Text(
+                                        comment.content ?? '',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      ),
+                                      const SizedBox(height: 4.0),
+                                      Text(
+                                        comment.createdAt != null
+                                            ? 'Posted on ${comment.createdAt}'
+                                            : 'Date unknown',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : Center(
+                            child: Text(
+                              "No comments yet.",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
                           ),
-                        ),
-                      ),
-                    );
-                  })
-                else
-                  Text(
-                    "No comments yet.",
-                    style: textTheme.bodyMedium,
-                  ),
+                  );
+                }),
               ],
             ),
           ),
@@ -324,7 +387,7 @@ class _ProductDetailScreenState extends State<ProductDetail> {
                     backgroundColor: Colors.green,
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                   ),
-                  child: const Text("Buy Now"),
+                  child: const Text("Trade"),
                 ),
               ),
               const SizedBox(width: 16.0),
@@ -336,7 +399,7 @@ class _ProductDetailScreenState extends State<ProductDetail> {
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                   ),
-                  child: const Text("Add to Favorites"),
+                  child: const Text("Favorites"),
                 ),
               ),
             ],

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:p2p_exchange/app/controllers/product_controller.dart';
+import 'package:p2p_exchange/app/controllers/my_home_controller.dart';
 import 'package:p2p_exchange/app/screens/my_home/edit_product.dart';
 import 'package:p2p_exchange/app/screens/my_home/filter_drawer.dart';
 import 'package:p2p_exchange/app/screens/my_home/my_products.dart';
@@ -13,8 +13,9 @@ class MyHomePage extends StatefulWidget {
     CupertinoIcons.collections,
     size: 25,
   );
+  final CupertinoTabController tabController;
 
-  const MyHomePage({super.key});
+  const MyHomePage({super.key, required this.tabController});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -22,7 +23,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-  final ProductController productController = Get.put(ProductController());
+  final MyHomeController myHomeController = Get.put(MyHomeController());
   late TabController _tabController;
   final myHomeKey = GlobalKey();
 
@@ -42,10 +43,10 @@ class _MyHomePageState extends State<MyHomePage>
   void onTabChanged(int index) {
     switch (index) {
       case 0:
-        productController.loadMySaleProducts();
+        myHomeController.loadMySaleProducts();
         break;
       case 1:
-        productController.loadMyProducts();
+        myHomeController.loadMyProducts();
         break;
       case 2:
         break;

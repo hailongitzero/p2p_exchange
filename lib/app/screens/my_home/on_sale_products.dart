@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:p2p_exchange/app/controllers/product_controller.dart';
+import 'package:p2p_exchange/app/controllers/my_home_controller.dart';
 import 'package:p2p_exchange/app/screens/my_home/product_card.dart';
 import 'package:p2p_exchange/app/screens/product_detail/product_detail.dart';
 
@@ -12,7 +12,7 @@ class OnSaleProducts extends StatefulWidget {
 }
 
 class _OnSaleProducts extends State<OnSaleProducts> {
-  final ProductController productController = Get.put(ProductController());
+  final MyHomeController myHomeController = Get.put(MyHomeController());
   final ScrollController _scrollController = ScrollController();
 
   // Flag to prevent multiple load triggers when already loading
@@ -21,7 +21,7 @@ class _OnSaleProducts extends State<OnSaleProducts> {
   @override
   void initState() {
     super.initState();
-    productController.loadMySaleProducts();
+    myHomeController.loadMySaleProducts();
 
     // Add listener to the scroll controller to detect when the user reaches the bottom
     _scrollController.addListener(() {
@@ -32,7 +32,7 @@ class _OnSaleProducts extends State<OnSaleProducts> {
           setState(() {
             isLoadingMore = true;
           });
-          productController.loadMoreSaleProducts().then((_) {
+          myHomeController.loadMoreSaleProducts().then((_) {
             setState(() {
               isLoadingMore = false;
             });
@@ -63,9 +63,9 @@ class _OnSaleProducts extends State<OnSaleProducts> {
                 mainAxisSpacing: 8.0,
                 childAspectRatio: 0.7,
               ),
-              itemCount: productController.saleProducts.length,
+              itemCount: myHomeController.saleProducts.length,
               itemBuilder: (context, index) {
-                final product = productController.saleProducts[index];
+                final product = myHomeController.saleProducts[index];
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(

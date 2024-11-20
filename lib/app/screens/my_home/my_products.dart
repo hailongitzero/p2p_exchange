@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:p2p_exchange/app/controllers/product_controller.dart';
+import 'package:p2p_exchange/app/controllers/my_home_controller.dart';
 import 'package:p2p_exchange/app/screens/my_home/product_card.dart';
 import 'package:p2p_exchange/app/screens/product_detail/product_detail.dart';
 
 class MyProducts extends StatelessWidget {
-  final ProductController productController = Get.put(ProductController());
+  final MyHomeController myHomeController = Get.put(MyHomeController());
 
   MyProducts({super.key});
 
@@ -20,9 +20,9 @@ class MyProducts extends StatelessWidget {
           mainAxisSpacing: 8.0,
           childAspectRatio: 0.7,
         ),
-        itemCount: productController.myProducts.length,
+        itemCount: myHomeController.myProducts.length,
         itemBuilder: (context, index) {
-          final product = productController.myProducts[index];
+          final product = myHomeController.myProducts[index];
           return GestureDetector(
             onTap: () {
               // Handle item click here

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:p2p_exchange/app/controllers/home_controller.dart';
+import 'package:p2p_exchange/app/controllers/product_controller.dart';
 import 'package:p2p_exchange/app/controllers/slide_controller.dart';
 import 'package:get/get.dart';
 import 'package:p2p_exchange/app/screens/home/product_card.dart';
 import 'package:p2p_exchange/app/screens/home/slide_item.dart';
-import 'package:p2p_exchange/app/screens/product_detail/product_detail.dart';
 
 class HomePage extends StatefulWidget {
   static const title = 'Home';
@@ -13,7 +13,8 @@ class HomePage extends StatefulWidget {
     CupertinoIcons.home,
     size: 25,
   );
-  const HomePage({super.key});
+  final CupertinoTabController tabController;
+  const HomePage({super.key, required this.tabController});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   final homeKey = GlobalKey();
   final SlideController slideController = Get.put(SlideController());
   final HomeController homeController = Get.put(HomeController());
+  final ProductController productController = Get.put(ProductController());
 
   @override
   void initState() {
@@ -51,16 +53,15 @@ class _HomePageState extends State<HomePage> {
                     filled: true,
                     fillColor: Colors.grey[200],
                   ),
+                  onChanged: (value) =>
+                      {productController.searchString.value = value},
                 ),
               ),
               const SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) =>
-                  //               ProductDetail(product: product)));
+                  widget.tabController.index = 1;
+                  productController.updateSearchParams();
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

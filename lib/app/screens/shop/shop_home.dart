@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:p2p_exchange/app/controllers/product_controller.dart';
+import 'package:p2p_exchange/app/controllers/my_home_controller.dart';
 import 'package:p2p_exchange/app/models/product.dart';
 
 class ShopHomePage extends StatelessWidget {
-  final ProductController productController = Get.put(ProductController());
+  final MyHomeController myHomeController = Get.put(MyHomeController());
 
   ShopHomePage({super.key});
 
@@ -64,7 +64,7 @@ class ShopHomePage extends StatelessWidget {
 
 // Widget for displaying products
 class ProductGridView extends StatelessWidget {
-  final ProductController productController = Get.find();
+  final MyHomeController myHomeController = Get.find();
 
   ProductGridView({super.key});
 
@@ -79,9 +79,9 @@ class ProductGridView extends StatelessWidget {
           mainAxisSpacing: 8.0,
           childAspectRatio: 0.7,
         ),
-        itemCount: productController.products.length,
+        itemCount: myHomeController.products.length,
         itemBuilder: (context, index) {
-          final product = productController.products[index];
+          final product = myHomeController.products[index];
           return ProductCard(product: product);
         },
       );
@@ -91,7 +91,7 @@ class ProductGridView extends StatelessWidget {
 
 // Widget for sorting products by price
 class PriceSortView extends StatelessWidget {
-  final ProductController productController = Get.find();
+  final MyHomeController myHomeController = Get.find();
 
   PriceSortView({super.key});
 
@@ -103,10 +103,10 @@ class PriceSortView extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Obx(() {
             return DropdownButton<String>(
-              value: productController.sortOrder.value,
+              value: myHomeController.sortOrder.value,
               onChanged: (String? newValue) {
-                productController.sortOrder.value = newValue!;
-                productController.sortProducts(); // Call sorting method
+                myHomeController.sortOrder.value = newValue!;
+                myHomeController.sortProducts(); // Call sorting method
               },
               items: <String>['Giá tăng dần', 'Giá giảm dần']
                   .map<DropdownMenuItem<String>>((String value) {
@@ -128,9 +128,9 @@ class PriceSortView extends StatelessWidget {
                 mainAxisSpacing: 8.0,
                 childAspectRatio: 0.7,
               ),
-              itemCount: productController.products.length,
+              itemCount: myHomeController.products.length,
               itemBuilder: (context, index) {
-                final product = productController.products[index];
+                final product = myHomeController.products[index];
                 return ProductCard(product: product);
               },
             );

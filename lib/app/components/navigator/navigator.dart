@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:p2p_exchange/app/screens/categories/category.dart';
 import 'package:p2p_exchange/app/screens/home/home.dart';
 import 'package:p2p_exchange/app/screens/my_home/my_home.dart';
+import 'package:p2p_exchange/app/screens/products/products.dart';
 
 class NavigatorBuilder extends StatefulWidget {
   const NavigatorBuilder({super.key, this.username});
@@ -19,7 +19,9 @@ class _NavigatorBuilderState extends State<NavigatorBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    final CupertinoTabController tabController = CupertinoTabController();
     return CupertinoTabScaffold(
+      controller: tabController,
       tabBar: CupertinoTabBar(
         items: const [
           BottomNavigationBarItem(
@@ -28,7 +30,7 @@ class _NavigatorBuilderState extends State<NavigatorBuilder> {
           ),
           BottomNavigationBarItem(
             // label: HomePage.title,
-            icon: CategoryScreen.icon,
+            icon: ProductsScreen.icon,
           ),
           BottomNavigationBarItem(
             // label: HomePage.title,
@@ -41,21 +43,18 @@ class _NavigatorBuilderState extends State<NavigatorBuilder> {
         return switch (index) {
           0 => CupertinoTabView(
               // defaultTitle: HomePage.title,
-              builder: (context) => HomePage(
-                key: homeKey,
-              ),
+              builder: (context) =>
+                  HomePage(key: homeKey, tabController: tabController),
             ),
           1 => CupertinoTabView(
-              defaultTitle: CategoryScreen.title,
-              builder: (context) => CategoryScreen(
-                key: receiptKey,
-              ),
+              defaultTitle: ProductsScreen.title,
+              builder: (context) =>
+                  ProductsScreen(key: receiptKey, tabController: tabController),
             ),
           2 => CupertinoTabView(
               defaultTitle: MyHomePage.title,
-              builder: (context) => MyHomePage(
-                key: productKey,
-              ),
+              builder: (context) =>
+                  MyHomePage(key: productKey, tabController: tabController),
             ),
           _ => const SizedBox.shrink(),
         };
