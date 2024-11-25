@@ -1,9 +1,19 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:p2p_exchange/app/controllers/user_controller.dart';
 import 'package:p2p_exchange/app/screens/registration/registration.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  UserController userController = Get.put(UserController());
 
   @override
   Widget build(BuildContext context) {
@@ -16,21 +26,34 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(
                 labelText: 'Email',
               ),
             ),
             const SizedBox(height: 20),
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(
                 labelText: 'Password',
               ),
               obscureText: true,
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () async {
+                if (await userController.login(_emailController.text.trim(),
+                    _passwordController.text.trim())) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('loginSuccess'.tr)),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('loginFail'.tr)),
+                  );
+                }
+              },
               child: const Text('Login'),
             ),
             const SizedBox(height: 20),

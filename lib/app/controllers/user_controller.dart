@@ -22,6 +22,21 @@ class UserController extends GetxController {
   Rx<File?> selectedImage = Rx<File?>(null);
   final ImagePicker _picker = ImagePicker();
 
+  Future<bool> login(
+    String email,
+    String password,
+  ) async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<void> fetchUserData() async {
     String uid = _auth.currentUser?.uid ?? "";
     DocumentSnapshot doc = await _firestore.collection('users').doc(uid).get();
@@ -38,6 +53,19 @@ class UserController extends GetxController {
         .collection('users')
         .doc(uid)
         .update(userModel.value.toJson());
+  }
+
+  Future<void> addUserFavorious(String productId) async {
+    try {
+      String uid = _auth.currentUser?.uid ?? "";
+
+      // Update Firestore by appending the new comment to the comments array
+      await _firestore.collection('users').doc(uid).update({
+        'favorites': FieldValue.arrayUnion([productId]),
+      });
+    } catch (e) {
+      // print("Failed to add comment: $e");
+    }
   }
 
   Future<String> uploadImage(File image) async {

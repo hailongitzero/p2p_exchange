@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:p2p_exchange/app/controllers/comment_controller.dart';
+import 'package:p2p_exchange/app/controllers/user_controller.dart';
 import 'package:p2p_exchange/app/models/comment.dart';
 import 'package:p2p_exchange/app/models/product.dart';
 
@@ -20,7 +21,8 @@ class ProductDetail extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetail> {
-  final CommentController commentController = CommentController();
+  final CommentController commentController = Get.put(CommentController());
+  final UserController userController = Get.put(UserController());
   final productDetailKey = GlobalKey();
   String formatCurrency(double amount) {
     final formatCurrency = NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
@@ -346,7 +348,9 @@ class _ProductDetailScreenState extends State<ProductDetail> {
                                       const SizedBox(height: 4.0),
                                       Text(
                                         comment.createdAt != null
-                                            ? 'Posted on ${comment.createdAt}'
+                                            ? DateFormat('dd/MM/yy HH:mm')
+                                                .format(comment.createdAt ??
+                                                    DateTime.now())
                                             : 'Date unknown',
                                         style: Theme.of(context)
                                             .textTheme
@@ -384,7 +388,7 @@ class _ProductDetailScreenState extends State<ProductDetail> {
                     // Buy logic
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                    backgroundColor: Colors.orange,
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                   ),
                   child: const Text("Trade"),
@@ -394,11 +398,10 @@ class _ProductDetailScreenState extends State<ProductDetail> {
               Expanded(
                 child: OutlinedButton(
                   onPressed: () {
-                    // Add to favorites logic
+                    userController.addUserFavorious(widget.product.productId!);
                   },
                   style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  ),
+                      padding: const EdgeInsets.symmetric(vertical: 16.0)),
                   child: const Text("Favorites"),
                 ),
               ),

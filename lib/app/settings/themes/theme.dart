@@ -4,8 +4,7 @@ class ThemeApp {
   static final light = ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      // primaryColor: Colors.blue,
-      // colorSchemeSeed: Colors.blueAccent,
+      colorSchemeSeed: Colors.blueAccent,
       fontFamily: 'Roboto',
       appBarTheme: const AppBarTheme(color: Colors.blue),
       textTheme: const TextTheme(
@@ -23,8 +22,7 @@ class ThemeApp {
   static final dart = ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      // primaryColor: Colors.blue,
-      // colorSchemeSeed: Colors.blueAccent,
+      colorSchemeSeed: Colors.blueGrey,
       fontFamily: 'Roboto',
       appBarTheme: const AppBarTheme(
         color: Colors.orange,

@@ -91,7 +91,7 @@ class CommentController extends GetxController {
       // Optionally, update the product in the controller's local cache
       comments.add(newComment);
     } catch (e) {
-      print("Failed to add comment: $e");
+      // print("Failed to add comment: $e");
     }
   }
 
@@ -142,7 +142,7 @@ class CommentController extends GetxController {
         }
       }
     } catch (e) {
-      print("Failed to update comments: $e");
+      // print("Failed to update comments: $e");
     }
   }
 

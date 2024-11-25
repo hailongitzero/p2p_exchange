@@ -36,8 +36,8 @@ class _AppState extends State<MainApp> {
     return GetMaterialApp(
       translations: LocalString(),
       title: 'hello'.tr,
-      themeMode: themeMode,
-      theme: ThemeApp.dart,
+      themeMode: ThemeMode.system,
+      theme: ThemeApp.light,
       darkTheme: ThemeApp.dart,
       builder: (context, child) {
         return CupertinoTheme(

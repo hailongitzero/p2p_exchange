@@ -6,6 +6,7 @@ import 'package:p2p_exchange/app/controllers/slide_controller.dart';
 import 'package:get/get.dart';
 import 'package:p2p_exchange/app/screens/home/product_card.dart';
 import 'package:p2p_exchange/app/screens/home/slide_item.dart';
+import 'package:p2p_exchange/app/screens/setting/setting.dart';
 
 class HomePage extends StatefulWidget {
   static const title = 'Home';
@@ -44,7 +45,7 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: 'Search for products',
+                    hintText: 'search'.tr,
                     prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -94,7 +95,7 @@ class _HomePageState extends State<HomePage> {
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Products',
+              'products'.tr,
               style: textTheme
                   .copyWith(
                       titleLarge: textTheme.titleLarge!.copyWith(
@@ -141,7 +142,10 @@ class _HomePageState extends State<HomePage> {
       key: homeKey,
       navigationBar: CupertinoNavigationBar(
         leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()));
+            },
             icon: const Icon(
               CupertinoIcons.gear,
               size: 20,

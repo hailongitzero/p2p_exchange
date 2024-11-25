@@ -80,8 +80,8 @@ class Product {
             : [],
         createdAt: (json['createdAt'] as Timestamp).toDate(),
         userId: json['userId'] ?? '',
-        comments: json?['comments'] != null
-            ? List<Comment>.from((json?['comments'] as List)
+        comments: json['comments'] != null
+            ? List<Comment>.from((json['comments'] as List)
                 .map((item) => Comment.fromMap(item as Map<String, dynamic>)))
             : [],
         tradeList: json['tradeList'] != null

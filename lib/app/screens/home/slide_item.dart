@@ -51,7 +51,7 @@ class SlideItem extends StatelessWidget {
                           onPressed: () {
                             // Implement navigation or action
                           },
-                          child: const Text('Buy'),
+                          child: Text('trade'.tr),
                         ),
                       ],
                     ),

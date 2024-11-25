@@ -79,7 +79,7 @@ class ProductController extends GetxController {
         hasMore.value = false; // No products in query
       }
     } catch (e) {
-      print('Error fetching products: $e');
+      // print('Error fetching products: $e');
     } finally {
       isLoading.value = false;
     }
