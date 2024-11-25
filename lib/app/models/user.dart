@@ -1,4 +1,6 @@
 // user_model.dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   String? id;
   String? username;
@@ -8,10 +10,10 @@ class UserModel {
   DateTime? createdAt;
   DateTime? lastLogin;
   bool isAdmin;
-  UserSettings userSettings;
-  List<String> favorites;
-  Location location;
-  Address address;
+  UserSettings? userSettings;
+  List<String>? favorites;
+  Location? location;
+  Address? address;
   String? idNumber;
 
   UserModel({
@@ -23,10 +25,10 @@ class UserModel {
     this.createdAt,
     this.lastLogin,
     this.isAdmin = false,
-    required this.userSettings,
-    required this.favorites,
-    required this.location,
-    required this.address,
+    this.userSettings,
+    this.favorites,
+    this.location,
+    this.address,
     this.idNumber,
   });
 
@@ -39,10 +41,10 @@ class UserModel {
         'createdAt': createdAt?.millisecondsSinceEpoch,
         'lastLogin': lastLogin?.millisecondsSinceEpoch,
         'isAdmin': isAdmin,
-        'userSettings': userSettings.toJson(),
+        'userSettings': userSettings?.toJson(),
         'favorites': favorites,
-        'location': location.toJson(),
-        'address': address.toJson(),
+        'location': location?.toJson(),
+        'address': address?.toJson(),
         'idNumber': idNumber,
       };
 
@@ -52,17 +54,20 @@ class UserModel {
         email: json['email'],
         profileImage: json['profileImage'],
         bio: json['bio'],
-        createdAt: json['createdAt'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(json['createdAt'])
-            : null,
+        createdAt: (json['createdAt'] as Timestamp).toDate(),
         lastLogin: json['lastLogin'] != null
-            ? DateTime.fromMillisecondsSinceEpoch(json['lastLogin'])
+            ? (json['lastLogin'] as Timestamp).toDate()
             : null,
         isAdmin: json['isAdmin'] ?? false,
-        userSettings: UserSettings.fromJson(json['userSettings']),
+        userSettings: json['userSettings'] != null
+            ? UserSettings.fromJson(json['userSettings'])
+            : null,
         favorites: List<String>.from(json['favorites'] ?? []),
-        location: Location.fromJson(json['location']),
-        address: Address.fromJson(json['address']),
+        location: json['location'] != null
+            ? Location.fromJson(json['location'])
+            : null,
+        address:
+            json['address'] != null ? Address.fromJson(json['address']) : null,
         idNumber: json['idNumber'],
       );
 }

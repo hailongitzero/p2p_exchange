@@ -16,7 +16,9 @@ class LocalString extends Translations {
           "logout": "Logout",
           "loginSuccess": "Login Success",
           "loginFail": "Login Fail",
-          "trade": "Trade"
+          "trade": "Trade",
+          "addFavoriousSuccess": "Add favorious success",
+          "addFavoriousFail": "Add favorious fail"
         },
         "vi_VN": {
           "hello": "Hola",

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:p2p_exchange/app/controllers/my_home_controller.dart';
 import 'package:p2p_exchange/app/screens/my_home/edit_product.dart';
+import 'package:p2p_exchange/app/screens/my_home/favorious.dart';
 import 'package:p2p_exchange/app/screens/my_home/filter_drawer.dart';
 import 'package:p2p_exchange/app/screens/my_home/my_products.dart';
 import 'package:p2p_exchange/app/screens/my_home/on_sale_products.dart';
@@ -49,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage>
         myHomeController.loadMyProducts();
         break;
       case 2:
+        myHomeController.loadMyFavorious();
         break;
     }
   }
@@ -129,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage>
           children: [
             const OnSaleProducts(),
             MyProducts(),
-            const Center(child: Text('Bán chạy')),
+            MyFavorious(),
             // PriceSortView(),
           ],
         ),

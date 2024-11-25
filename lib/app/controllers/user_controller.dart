@@ -55,7 +55,7 @@ class UserController extends GetxController {
         .update(userModel.value.toJson());
   }
 
-  Future<void> addUserFavorious(String productId) async {
+  Future<bool> addUserFavorious(String productId) async {
     try {
       String uid = _auth.currentUser?.uid ?? "";
 
@@ -63,7 +63,9 @@ class UserController extends GetxController {
       await _firestore.collection('users').doc(uid).update({
         'favorites': FieldValue.arrayUnion([productId]),
       });
+      return true;
     } catch (e) {
+      return false;
       // print("Failed to add comment: $e");
     }
   }
@@ -85,22 +87,17 @@ class UserController extends GetxController {
   void setUsername(String username) => userModel.value.username = username;
   void setBio(String bio) => userModel.value.bio = bio;
   void setNotificationPreferences(bool value) =>
-      userModel.value.userSettings.notificationPreferences = value;
+      userModel.value.userSettings?.notificationPreferences = value;
   void setTheme(String? theme) =>
-      userModel.value.userSettings.theme = theme ?? 'light';
+      userModel.value.userSettings?.theme = theme ?? 'light';
   void setLanguage(String language) =>
-      userModel.value.userSettings.language = language;
+      userModel.value.userSettings?.language = language;
   void setLatitude(double latitude) =>
-      userModel.value.location.latitude = latitude;
+      userModel.value.location?.latitude = latitude;
   void setLongitude(double longitude) =>
-      userModel.value.location.longitude = longitude;
-  void setStreet(String street) => userModel.value.address.street = street;
-  void setCity(String city) => userModel.value.address.city = city;
-  void setState(String state) => userModel.value.address.state = state;
-  void setZipCode(String zipCode) => userModel.value.address.zipCode = zipCode;
-  void addFavorite(String productId) {
-    if (!userModel.value.favorites.contains(productId)) {
-      userModel.value.favorites.add(productId);
-    }
-  }
+      userModel.value.location?.longitude = longitude;
+  void setStreet(String street) => userModel.value.address?.street = street;
+  void setCity(String city) => userModel.value.address?.city = city;
+  void setState(String state) => userModel.value.address?.state = state;
+  void setZipCode(String zipCode) => userModel.value.address?.zipCode = zipCode;
 }

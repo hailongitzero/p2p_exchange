@@ -1,6 +1,7 @@
 // controllers/product_controller.dart
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:p2p_exchange/app/models/user.dart';
 import 'package:path/path.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -17,6 +18,7 @@ class MyHomeController extends GetxController {
   var product = Rxn<Product>();
   var products = <Product>[].obs;
   var myProducts = <Product>[].obs;
+  var myFavorious = <Product>[].obs;
   var saleProducts = <Product>[].obs;
   var imageSlidesUrls = <String>[].obs; // To hold image slides URLs
   var isImageSlidesUploading = false.obs;
@@ -113,14 +115,6 @@ class MyHomeController extends GetxController {
   }
 
   // Load product details if updating
-  Future<void> loadProducts(String productId) async {
-    var snapshot = await _firestore.collection('products').doc(productId).get();
-    if (snapshot.exists) {
-      product.value = Product.fromJson(snapshot.data()!);
-    }
-  }
-
-  // Load product details if updating
   Future<void> loadMyProducts() async {
     try {
       // Query Firestore for products with the specified userId
@@ -157,6 +151,48 @@ class MyHomeController extends GetxController {
     } catch (e) {
       // Handle errors here, like logging or showing an error message
       saleProducts.value = [];
+    }
+  }
+
+  // Load product details if updating
+  Future<void> loadMyFavorious() async {
+    try {
+      const int chunkSize = 10; // Firestore limits whereIn to 10 items
+      List<Product> fetchProducts = [];
+      // Query Firestore for products with the specified userId
+      var snapshot =
+          await _firestore.collection('users').doc(getCurrentUserId()).get();
+      if (snapshot.exists) {
+        UserModel user = UserModel.fromJson(snapshot.data()!);
+        for (int i = 0; i < user.favorites!.length; i += chunkSize) {
+          List<String> chunk = user.favorites!.sublist(
+            i,
+            i + chunkSize > user.favorites!.length
+                ? user.favorites!.length
+                : i + chunkSize,
+          );
+
+          QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+              .collection('products')
+              .where(FieldPath.documentId, whereIn: chunk)
+              .get();
+
+          fetchProducts.addAll(querySnapshot.docs
+              .map((doc) => Product.fromDocumentSnapshot(doc))
+              .toList());
+        }
+        myFavorious.value = fetchProducts;
+        // var faSnapshot = await _firestore
+        //     .collection('products')
+        //     .where(FieldPath.documentId, whereIn: user.favorites)
+        //     .get();
+        // myFavorious.value = faSnapshot.docs
+        //     .map((doc) => Product.fromDocumentSnapshot(doc))
+        //     .toList();
+      }
+    } catch (e) {
+      // Handle errors here, like logging or showing an error message
+      myFavorious.value = [];
     }
   }
 

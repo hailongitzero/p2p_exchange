@@ -397,11 +397,32 @@ class _ProductDetailScreenState extends State<ProductDetail> {
               const SizedBox(width: 16.0),
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () {
-                    userController.addUserFavorious(widget.product.productId!);
+                  onPressed: () async {
+                    bool isAdded = await userController
+                        .addUserFavorious(widget.product.id!);
+                    showDialog(
+                      context: context, // Parent context
+                      builder: (BuildContext dialogContext) {
+                        return CupertinoAlertDialog(
+                          title: const Text("Success"),
+                          content:
+                              const Text("Added to favorites successfully!"),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: const Text("OK"),
+                              onPressed: () {
+                                Navigator.pop(
+                                    dialogContext); // Use dialog's context to pop
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                   style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0)),
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  ),
                   child: const Text("Favorites"),
                 ),
               ),
