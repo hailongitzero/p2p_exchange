@@ -10,9 +10,7 @@ class RegistrationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register'),
-      ),
+      appBar: AppBar(title: const Text('Register')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -22,9 +20,7 @@ class RegistrationPage extends StatelessWidget {
             const SizedBox(height: 20),
             TextField(
               controller: controller.emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-              ),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
             const SizedBox(height: 20),
             Obx(() => TextField(
@@ -32,11 +28,9 @@ class RegistrationPage extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: 'Password',
                     suffixIcon: IconButton(
-                      icon: Icon(
-                        controller.isPasswordVisible.value
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                      ),
+                      icon: Icon(controller.isPasswordVisible.value
+                          ? Icons.visibility
+                          : Icons.visibility_off),
                       onPressed: controller.togglePasswordVisibility,
                     ),
                   ),
@@ -48,11 +42,9 @@ class RegistrationPage extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: 'Confirm Password',
                     suffixIcon: IconButton(
-                      icon: Icon(
-                        controller.isPasswordVisible.value
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                      ),
+                      icon: Icon(controller.isPasswordVisible.value
+                          ? Icons.visibility
+                          : Icons.visibility_off),
                       onPressed: controller.togglePasswordVisibility,
                     ),
                   ),
@@ -63,30 +55,19 @@ class RegistrationPage extends StatelessWidget {
                   controller.errorMessage.value,
                   style: const TextStyle(color: Colors.red),
                 )),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Obx(() => Checkbox(
-                      value: controller.isAccepted.value,
-                      onChanged: (bool? value) {
-                        controller.toggleAcceptance(value);
-                      },
-                    )),
-                const Text('Accept Terms and Conditions'),
-              ],
-            ),
-            const SizedBox(height: 20),
+            Obx(() => CheckboxListTile(
+                  value: controller.isAccepted.value,
+                  onChanged: controller.toggleAcceptance,
+                  title: const Text('Accept Terms and Conditions'),
+                )),
             Obx(() => ElevatedButton(
-                  onPressed: () {
-                    controller.isAccepted.value
-                        ? Get.find<RegistrationController>().register(context)
-                        : null;
-                  },
+                  onPressed: controller.isAccepted.value
+                      ? () => controller.register(context)
+                      : null,
                   child: const Text('Register'),
                 )),
             const SizedBox(height: 20),
             const Text('Or register with'),
-            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

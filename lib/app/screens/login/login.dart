@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:p2p_exchange/app/controllers/user_controller.dart';
 import 'package:p2p_exchange/app/screens/registration/registration.dart';
+import 'package:p2p_exchange/app/screens/splash/splash.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -47,6 +48,12 @@ class _LoginPageState extends State<LoginPage> {
                     _passwordController.text.trim())) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('loginSuccess'.tr)),
+                  );
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SplashScreen()),
+                    (route) => false, // Remove all previous routes
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(

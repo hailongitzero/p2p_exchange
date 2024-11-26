@@ -112,5 +112,10 @@ Make sure to open the project in Xcode to archive and submit it to the App Store
 
 ## Resources
 
-![Alt text](lib/assets/slide/login.png?raw=true "Login")
-<img src='lib/assets/slide/login.png' width=300>
+<img src='lib/assets/slide/login.png' width=300 alt='login'>
+<img src='lib/assets/slide/registration.png' width=300 alt='register'>
+<img src='lib/assets/slide/home.png' width=300 alt='home'>
+<img src='lib/assets/slide/my_home.png' width=300 alt='my home'>
+<img src='lib/assets/slide/add.png' width=300 alt='add product'>
+<img src='lib/assets/slide/product_detail.png' width=300 alt='product detail'>
+<img src='lib/assets/slide/comment.png' width=300 alt='product comment'>
