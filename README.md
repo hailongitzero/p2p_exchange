@@ -171,6 +171,4 @@ comments
 ├── createdAt: <timestamp>
 └── likes: 12
 
-//them loadmore,
-//try catch image
-hang moi/ hang cu
+![Alt text](lib/assets/slide/login.png?raw=true "Login")

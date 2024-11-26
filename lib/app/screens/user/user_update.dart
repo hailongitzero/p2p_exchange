@@ -33,11 +33,11 @@ class UserUpdatePage extends StatelessWidget {
               const SizedBox(height: 8),
               SwitchListTile(
                 title: const Text("Notification Preferences"),
-                value: user.userSettings.notificationPreferences,
+                value: user.userSettings!.notificationPreferences,
                 onChanged: _controller.setNotificationPreferences,
               ),
               DropdownButtonFormField<String>(
-                value: user.userSettings.theme,
+                value: user.userSettings!.theme,
                 items: const [
                   DropdownMenuItem(value: "light", child: Text("Light")),
                   DropdownMenuItem(value: "dark", child: Text("Dark")),
@@ -48,22 +48,22 @@ class UserUpdatePage extends StatelessWidget {
               TextField(
                 onChanged: _controller.setStreet,
                 decoration: const InputDecoration(labelText: 'Street'),
-                controller: TextEditingController(text: user.address.street),
+                controller: TextEditingController(text: user.address!.street),
               ),
               TextField(
                 onChanged: _controller.setCity,
                 decoration: const InputDecoration(labelText: 'City'),
-                controller: TextEditingController(text: user.address.city),
+                controller: TextEditingController(text: user.address!.city),
               ),
               TextField(
                 onChanged: _controller.setState,
                 decoration: const InputDecoration(labelText: 'State'),
-                controller: TextEditingController(text: user.address.state),
+                controller: TextEditingController(text: user.address!.state),
               ),
               TextField(
                 onChanged: _controller.setZipCode,
                 decoration: const InputDecoration(labelText: 'Zip Code'),
-                controller: TextEditingController(text: user.address.zipCode),
+                controller: TextEditingController(text: user.address!.zipCode),
               ),
               ElevatedButton(
                 onPressed: _controller.updateUserData,
