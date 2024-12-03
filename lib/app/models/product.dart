@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:p2p_exchange/app/models/Trade.dart';
 import 'package:p2p_exchange/app/models/comment.dart';
 
 class Product {
@@ -16,7 +17,7 @@ class Product {
   late DateTime? createdAt;
   late String userId;
   late List<Comment>? comments;
-  late List<String>? tradeList;
+  late List<Trade>? tradeList;
 
   Product({
     this.id,
@@ -59,7 +60,8 @@ class Product {
               .map((item) => Comment.fromMap(item as Map<String, dynamic>)))
           : [],
       tradeList: data?['tradeList'] != null
-          ? List<String>.from(data?['tradeList'] as List)
+          ? List<Trade>.from((data?['tradeList'] as List)
+              .map((item) => Trade.fromMap(item as Map<String, dynamic>)))
           : [],
     );
   }
@@ -85,7 +87,8 @@ class Product {
                 .map((item) => Comment.fromMap(item as Map<String, dynamic>)))
             : [],
         tradeList: json['tradeList'] != null
-            ? List<String>.from(json['tradeList'] as List)
+            ? List<Trade>.from((json['tradeList'] as List)
+                .map((item) => Trade.fromMap(item as Map<String, dynamic>)))
             : [],
       );
 

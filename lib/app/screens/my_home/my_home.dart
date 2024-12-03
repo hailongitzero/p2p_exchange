@@ -7,6 +7,7 @@ import 'package:p2p_exchange/app/screens/my_home/favorious.dart';
 import 'package:p2p_exchange/app/screens/my_home/filter_drawer.dart';
 import 'package:p2p_exchange/app/screens/my_home/my_products.dart';
 import 'package:p2p_exchange/app/screens/my_home/on_sale_products.dart';
+import 'package:p2p_exchange/app/screens/my_home/trade_list.dart';
 
 class MyHomePage extends StatefulWidget {
   static const title = 'My Page';
@@ -31,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
 
     // Listen to tab changes
     _tabController.addListener(() {
@@ -51,6 +52,9 @@ class _MyHomePageState extends State<MyHomePage>
         break;
       case 2:
         myHomeController.loadMyFavorious();
+        break;
+      case 3:
+        myHomeController.loadMyTrades();
         break;
     }
   }
@@ -84,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   Widget _buildBody() {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -122,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage>
               Tab(text: 'Đang bán'),
               Tab(text: 'Tất cả'),
               Tab(text: 'Yêu thích'),
-              // Tab(text: 'Giá'),
+              Tab(text: 'Trao đổi'),
             ],
           ),
         ),
@@ -132,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage>
             const OnSaleProducts(),
             MyProducts(),
             MyFavorious(),
-            // PriceSortView(),
+            MyTrades(),
           ],
         ),
         endDrawer: const FilterDrawer(),

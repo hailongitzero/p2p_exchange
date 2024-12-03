@@ -19,6 +19,7 @@ class MyHomeController extends GetxController {
   var products = <Product>[].obs;
   var myProducts = <Product>[].obs;
   var myFavorious = <Product>[].obs;
+  var myTrades = <Product>[].obs;
   var saleProducts = <Product>[].obs;
   var imageSlidesUrls = <String>[].obs; // To hold image slides URLs
   var isImageSlidesUploading = false.obs;
@@ -193,6 +194,48 @@ class MyHomeController extends GetxController {
     } catch (e) {
       // Handle errors here, like logging or showing an error message
       myFavorious.value = [];
+    }
+  }
+
+  // Load product details if updating
+  Future<void> loadMyTrades() async {
+    try {
+      const int chunkSize = 10; // Firestore limits whereIn to 10 items
+      List<Product> fetchProducts = [];
+      // Query Firestore for products with the specified userId
+      var snapshot =
+          await _firestore.collection('users').doc(getCurrentUserId()).get();
+      if (snapshot.exists) {
+        UserModel user = UserModel.fromJson(snapshot.data()!);
+        for (int i = 0; i < user.tradeList!.length; i += chunkSize) {
+          List<String> chunk = user.tradeList!.sublist(
+            i,
+            i + chunkSize > user.tradeList!.length
+                ? user.tradeList!.length
+                : i + chunkSize,
+          );
+
+          QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+              .collection('products')
+              .where(FieldPath.documentId, whereIn: chunk)
+              .get();
+
+          fetchProducts.addAll(querySnapshot.docs
+              .map((doc) => Product.fromDocumentSnapshot(doc))
+              .toList());
+        }
+        myTrades.value = fetchProducts;
+        // var faSnapshot = await _firestore
+        //     .collection('products')
+        //     .where(FieldPath.documentId, whereIn: user.favorites)
+        //     .get();
+        // myFavorious.value = faSnapshot.docs
+        //     .map((doc) => Product.fromDocumentSnapshot(doc))
+        //     .toList();
+      }
+    } catch (e) {
+      // Handle errors here, like logging or showing an error message
+      myTrades.value = [];
     }
   }
 

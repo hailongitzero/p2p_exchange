@@ -5,7 +5,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:p2p_exchange/app/controllers/comment_controller.dart';
+import 'package:p2p_exchange/app/controllers/trade_controller.dart';
 import 'package:p2p_exchange/app/controllers/user_controller.dart';
+import 'package:p2p_exchange/app/models/Trade.dart';
 import 'package:p2p_exchange/app/models/comment.dart';
 import 'package:p2p_exchange/app/models/product.dart';
 
@@ -22,6 +24,7 @@ class ProductDetail extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetail> {
   final CommentController commentController = Get.put(CommentController());
+  final TradeController tradeController = Get.put(TradeController());
   final UserController userController = Get.put(UserController());
   final productDetailKey = GlobalKey();
   String formatCurrency(double amount) {
@@ -41,6 +44,7 @@ class _ProductDetailScreenState extends State<ProductDetail> {
     // Initialize product if it's null, otherwise set the provided product
     commentController.getProductComments(widget.product.id!);
     commentController.comment.value = Comment();
+    tradeController.trade.value = Trade();
   }
 
   // Function to open the comment modal
@@ -128,6 +132,96 @@ class _ProductDetailScreenState extends State<ProductDetail> {
                               .pop(); // Close dialog after submitting
                         },
                   child: const Text("Submit"),
+                )),
+          ],
+        );
+      },
+    );
+  }
+
+  void _openTradeModal() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Message"),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  initialValue: tradeController.trade.value?.content,
+                  maxLines: 5,
+                  decoration: const InputDecoration(labelText: 'Message'),
+                  onChanged: (value) => tradeController.trade.update((cmd) {
+                    cmd?.content = value;
+                  }),
+                ),
+                const SizedBox(height: 16.0),
+                Obx(() => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (tradeController.isImagesUploading.value)
+                          const Padding(
+                            padding: EdgeInsets.only(left: 16.0),
+                            child: CircularProgressIndicator(),
+                          )
+                        else if (tradeController.imagesUrls.isNotEmpty)
+                          Wrap(
+                            spacing: 8.0,
+                            children: tradeController.imagesUrls
+                                .map((url) => Image.network(
+                                      url,
+                                      width: 100,
+                                      height: 100,
+                                    ))
+                                .toList(),
+                          )
+                        else if (!(tradeController
+                                .trade.value?.images?.isEmpty ??
+                            true))
+                          Wrap(
+                            spacing: 8.0,
+                            children: tradeController.trade.value!.images!
+                                .map((url) => Image.network(
+                                      url,
+                                      width: 100,
+                                      height: 100,
+                                    ))
+                                .toList(),
+                          )
+                        else
+                          Container(),
+                        const SizedBox(height: 16.0),
+                        ElevatedButton(
+                          onPressed: tradeController.isImagesUploading.value
+                              ? null
+                              : () async {
+                                  await tradeController.pickAndUploadImages();
+                                },
+                          child: const Text('Select Images'),
+                        ),
+                      ],
+                    )),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            Obx(() => ElevatedButton(
+                  onPressed: tradeController.isImagesUploading.value
+                      ? null
+                      : () async {
+                          await tradeController.addProductTrade(
+                              widget.product.id!, tradeController.trade.value!);
+                          Navigator.of(context)
+                              .pop(); // Close dialog after submitting
+                        },
+                  child: const Text("Trade"),
                 )),
           ],
         );
@@ -385,7 +479,7 @@ class _ProductDetailScreenState extends State<ProductDetail> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    // Buy logic
+                    _openTradeModal();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,

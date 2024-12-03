@@ -12,6 +12,7 @@ class UserModel {
   bool isAdmin;
   UserSettings? userSettings;
   List<String>? favorites;
+  List<String>? tradeList;
   Location? location;
   Address? address;
   String? idNumber;
@@ -27,6 +28,7 @@ class UserModel {
     this.isAdmin = false,
     this.userSettings,
     this.favorites,
+    this.tradeList,
     this.location,
     this.address,
     this.idNumber,
@@ -43,6 +45,7 @@ class UserModel {
         'isAdmin': isAdmin,
         'userSettings': userSettings?.toJson(),
         'favorites': favorites,
+        'tradeList': tradeList,
         'location': location?.toJson(),
         'address': address?.toJson(),
         'idNumber': idNumber,
@@ -63,6 +66,7 @@ class UserModel {
             ? UserSettings.fromJson(json['userSettings'])
             : null,
         favorites: List<String>.from(json['favorites'] ?? []),
+        tradeList: List<String>.from(json['tradeList'] ?? []),
         location: json['location'] != null
             ? Location.fromJson(json['location'])
             : null,
