@@ -1,5 +1,14 @@
 # p2p_exchange
 
+Giới Thiệu:
+P2P Exchange là ứng dụng trao đổi đồ/mua bán đồ cũ, tại đây người bán/trao đổi sẽ thực hiện post bài đăng và người có nhu cầu mua/trao đổi sẽ trao đổi trực tiếp với nhau qua ứng dụng và tiến hành trao đổi.
+chức năng: 
+1. **người bán/trao đổi**
+   - sẽ đăng nhập vào hệ thống, đăng bài.
+   - menu của người bán bao gồm
+3. người mua/trao đổi đăng nhập vào hệ thống sau đó tìm kiếm sản phẩm mong muốn, chọn sản phẩm và tiến hành trao đổi với chủ sở hửu.
+
+
 # Flutter App
 
 Welcome to the Flutter App! This guide will help you set up and build the project on your local machine.
