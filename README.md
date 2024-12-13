@@ -5,8 +5,11 @@ P2P Exchange là ứng dụng trao đổi đồ/mua bán đồ cũ, tại đây 
 chức năng: 
 1. **người bán/trao đổi**
    - sẽ đăng nhập vào hệ thống, đăng bài.
-   - menu của người bán bao gồm
-3. người mua/trao đổi đăng nhập vào hệ thống sau đó tìm kiếm sản phẩm mong muốn, chọn sản phẩm và tiến hành trao đổi với chủ sở hửu.
+   - menu của người bán bao gồm: Đang bán, Tất cả, Yêu thích, Đang giao dịch
+3. **người mua/trao đổi**
+   -  đăng nhập vào hệ thống sau đó tìm kiếm sản phẩm mong muốn, chọn sản phẩm và tiến hành trao đổi với chủ sở hửu.
+   -  sau khi chọn sản phầm muốn giao dịch và chọn tiến hành giao dịch, sản phẩm này sẽ được thêm vào danh sách đang tiến hành giao dịch của người dùng.
+   -  2 bên sẽ thảo luận trực tiếp qua phần trao đổi của sản phẩm và tiến hành giao dịch (hiện tại app chưa cung cấp phương thức xác nhận giao dịch vào giao hàng)
 
 
 # Flutter App
