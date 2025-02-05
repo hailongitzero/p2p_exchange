@@ -11,6 +11,7 @@ chức năng:
    -  sau khi chọn sản phầm muốn giao dịch và chọn tiến hành giao dịch, sản phẩm này sẽ được thêm vào danh sách đang tiến hành giao dịch của người dùng.
    -  2 bên sẽ thảo luận trực tiếp qua phần trao đổi của sản phẩm và tiến hành giao dịch (hiện tại app chưa cung cấp phương thức xác nhận giao dịch vào giao hàng)
 
+Link Present: https://docs.google.com/presentation/d/1TpqmDt8q7elZBCBKB2JXmGzCoxOMeqN_/edit?usp=drive_link&ouid=114640800113829062639&rtpof=true&sd=true
 
 # Flutter App
 
